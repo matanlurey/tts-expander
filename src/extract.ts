@@ -238,7 +238,7 @@ export class SplitIO {
     return splitSave(await this.readJson(file));
   }
 
-  async writeSplit(to: string, data: SplitSaveState): Promise<void> {
+  async writeSplit(to: string, data: SplitSaveState): Promise<string> {
     return this.writeSplitSave(to, data);
   }
 
@@ -264,7 +264,7 @@ export class SplitIO {
   private async writeSplitSave(
     to: string,
     data: SplitSaveState,
-  ): Promise<void> {
+  ): Promise<string> {
     const outJson = path.join(to, data.metadata.filePath);
     await this.writeJson(outJson, this.toEncodedSave(data));
 
@@ -286,6 +286,8 @@ export class SplitIO {
         data.children.map((c) => this.writeSplitObject(outChild, c.contents!)),
       );
     }
+
+    return outJson;
   }
 
   private async writeSplitObject(
@@ -327,5 +329,135 @@ export class SplitIO {
         ),
       );
     }
+  }
+
+  async readAndCollapse(file: string): Promise<SaveState> {
+    return this.collapseSave(await this.readExtractedSave(file));
+  }
+
+  private collapseSave(save: SplitSaveState): SaveState {
+    return {
+      ...save.metadata.contents,
+      LuaScript: save.luaScript?.contents || '',
+      XmlUI: save.xmlUi?.contents || '',
+      ObjectStates: save.children.map((c) => this.collapseObject(c.contents)),
+    } as SaveState;
+  }
+
+  private collapseObject(object: SplitObjectState): ObjectState {
+    const result = {
+      ...object.metadata.contents,
+      LuaScript: object.luaScript?.contents || '',
+      XmlUI: object.xmlUi?.contents || '',
+      ContainedObjects: object.children.map((c) =>
+        this.collapseObject(c.contents),
+      ),
+    } as ObjectState;
+    if (!result.ContainedObjects?.length) {
+      delete result.ContainedObjects;
+    }
+    if (Object.keys(object.states).length) {
+      const states: { [k: string]: ObjectState } = {};
+      for (const k in object.states) {
+        states[k] = this.collapseObject(object.states[k].contents);
+      }
+      result.States = states;
+    }
+    return result;
+  }
+
+  private async readIncludes(
+    dirName: string,
+    luaOrXml?: string,
+  ): Promise<SplitFragment | undefined> {
+    if (!luaOrXml) {
+      return undefined;
+    }
+    if (!luaOrXml.startsWith('#include')) {
+      throw `Unexpected: ${luaOrXml}`;
+    }
+    const relativeFile = luaOrXml.split('#include')[1].trim();
+    const contents = await this.readFile(
+      path.join(dirName, relativeFile),
+      'utf-8',
+    );
+    return {
+      filePath: relativeFile,
+      contents,
+    };
+  }
+
+  private async readExtractedSave(file: string): Promise<SplitSaveState> {
+    const entry = (await this.readJson(file)) as VarnishSaveState;
+    return {
+      metadata: {
+        contents: entry.Save,
+        filePath: path.basename(file),
+      },
+      children: await Promise.all(
+        entry.ObjectPaths.map(async (relative) => {
+          const target = path.join(
+            path.dirname(file),
+            path.basename(file).split('.')[0],
+            relative,
+          );
+          return {
+            filePath: path.basename(target),
+            contents: await this.readExtractedObject(target),
+          };
+        }),
+      ),
+      luaScript: await this.readIncludes(
+        path.dirname(file),
+        entry.Save.LuaScript,
+      ),
+      xmlUi: await this.readIncludes(path.dirname(file), entry.Save.XmlUI),
+    };
+  }
+
+  private async readExtractedObject(file: string): Promise<SplitObjectState> {
+    const entry = (await this.readJson(file)) as VarnishObjectState;
+    const states: {
+      [key: string]: {
+        contents: SplitObjectState;
+        filePath: string;
+      };
+    } = {};
+    for (const k in entry.StatesPaths) {
+      const target = path.join(
+        path.dirname(file),
+        path.basename(file).split('.')[0],
+        entry.StatesPaths[k],
+      );
+      states[k] = {
+        filePath: path.basename(target),
+        contents: await this.readExtractedObject(target),
+      };
+    }
+    return {
+      metadata: {
+        contents: entry.Object,
+        filePath: path.basename(file),
+      },
+      children: await Promise.all(
+        entry.ContainedObjectPaths.map(async (relative) => {
+          const target = path.join(
+            path.dirname(file),
+            path.basename(file).split('.')[0],
+            relative,
+          );
+          return {
+            filePath: path.basename(target),
+            contents: await this.readExtractedObject(target),
+          };
+        }),
+      ),
+      states,
+      luaScript: await this.readIncludes(
+        path.dirname(file),
+        entry.Object.LuaScript,
+      ),
+      xmlUi: await this.readIncludes(path.dirname(file), entry.Object.XmlUI),
+    };
   }
 }
