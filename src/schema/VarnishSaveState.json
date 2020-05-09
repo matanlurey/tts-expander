@@ -1,0 +1,23 @@
+{
+  "$id": "https://varnish.tts.slwegion.dev/VarnishSaveState.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+
+  "title": "VarnishSaveState",
+  "type": "object",
+
+  "properties": {
+    "Save": {
+      "$ref": "../../node_modules/@matanlurey/tts-save-format/src/schema/SaveState.json"
+    },
+    "ObjectPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+
+  "required": ["Save", "ObjectPaths"],
+
+  "additionalProperties": false
+}

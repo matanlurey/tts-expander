@@ -1,1 +1,3 @@
-# node-typescript-template
+# tts-varnish
+
+Development tool for Tabletop Simulator.

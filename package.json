@@ -1,23 +1,31 @@
 {
-  "name": "@matanlurey/node-typescript-template",
+  "name": "@matanlurey/tts-varnish",
   "version": "0.1.0",
-  "description": "Node.js template for TypeScript",
+  "description": "Development tool for Tabletop Simulator",
   "scripts": {
     "fix": "prettier --write . --ignore-path .gitignore && eslint --fix src test --ext .ts",
+    "generate": "ts-node tool/generate.ts --output \"./src/schema.d.ts\"",
     "lint": "prettier --ignore-path .gitignore --list-different src && eslint src test --ext .ts",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/matanlurey/node-typescript-template.git"
+    "url": "git+https://github.com/matanlurey/tts-varnish.git"
   },
   "main": "src/index.ts",
   "author": "Matan Lurey",
   "keywords": [],
   "license": "MIT",
+  "dependencies": {
+    "@matanlurey/tts-editor": "github:matanlurey/tts-editor",
+    "@matanlurey/tts-runner": "github:matanlurey/tts-runner",
+    "@matanlurey/tts-save-format": "github:matanlurey/tts-save-format",
+    "fs-extra": "^9.0.0"
+  },
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
     "@types/jest": "^25.2.1",
+    "@types/minimist": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "eslint": "^6.8.0",
@@ -26,6 +34,8 @@
     "eslint-plugin-json": "^2.1.1",
     "eslint-plugin-prettier": "^3.1.3",
     "jest": "^25.5.4",
+    "json-schema-to-typescript": "^9.0.1",
+    "minimist": "^1.2.5",
     "prettier": "^2.0.5",
     "ts-jest": "^25.4.0",
     "ts-node": "^8.9.1",
