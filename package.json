@@ -1,7 +1,7 @@
 {
-  "name": "@matanlurey/tts-varnish",
+  "name": "@matanlurey/tts-expander",
   "version": "0.1.0",
-  "description": "Development tool for Tabletop Simulator",
+  "description": "Expands and collapses the save-file format for Tabletop Simulator",
   "scripts": {
     "fix": "prettier --write . --ignore-path .prettierignore && eslint --fix src test --ext .ts",
     "generate": "ts-node tool/generate.ts --output \"./src/schema.d.ts\"",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/matanlurey/tts-varnish.git"
+    "url": "git+https://github.com/matanlurey/tts-expander.git"
   },
   "main": "src/index.ts",
   "author": "Matan Lurey",

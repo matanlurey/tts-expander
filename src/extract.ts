@@ -1,7 +1,7 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 import * as fs from 'fs-extra';
 import path from 'path';
-import { VarnishObjectState, VarnishSaveState } from './schema';
+import { ExpandedObjectState, ExpandedSaveState } from './schema';
 
 export type SplitFragment = {
   contents: string;
@@ -242,14 +242,14 @@ export class SplitIO {
     return this.writeSplitSave(to, data);
   }
 
-  private toEncodedSave(data: SplitSaveState): VarnishSaveState {
+  private toEncodedSave(data: SplitSaveState): ExpandedSaveState {
     return {
       Save: data.metadata.contents as SaveState,
       ObjectPaths: data.children.map((c) => c.filePath),
     };
   }
 
-  private toEncodedObject(data: SplitObjectState): VarnishObjectState {
+  private toEncodedObject(data: SplitObjectState): ExpandedObjectState {
     const StatePaths: { [key: string]: string } = {};
     for (const k in data.states) {
       StatePaths[k] = data.states[k].filePath;
@@ -388,7 +388,7 @@ export class SplitIO {
   }
 
   private async readExtractedSave(file: string): Promise<SplitSaveState> {
-    const entry = (await this.readJson(file)) as VarnishSaveState;
+    const entry = (await this.readJson(file)) as ExpandedSaveState;
     return {
       metadata: {
         contents: entry.Save,
@@ -416,7 +416,7 @@ export class SplitIO {
   }
 
   private async readExtractedObject(file: string): Promise<SplitObjectState> {
-    const entry = (await this.readJson(file)) as VarnishObjectState;
+    const entry = (await this.readJson(file)) as ExpandedObjectState;
     const states: {
       [key: string]: {
         contents: SplitObjectState;

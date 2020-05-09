@@ -3,9 +3,9 @@
 
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 
-/* Generated from VarnishObjectState.json */
+/* Generated from ExpandedObjectState.json */
 
-export interface VarnishObjectState {
+export interface ExpandedObjectState {
   Object: ObjectState;
   ContainedObjectPaths: string[];
   StatesPaths: {
@@ -13,9 +13,9 @@ export interface VarnishObjectState {
   };
 }
 
-/* Generated from VarnishSaveState.json */
+/* Generated from ExpandedSaveState.json */
 
-export interface VarnishSaveState {
+export interface ExpandedSaveState {
   Save: SaveState;
   ObjectPaths: string[];
 }

@@ -1,3 +1,3 @@
-# tts-varnish
+# tts-expander
 
-Development tool for Tabletop Simulator.
+Expands and collapses the save-file format for Tabletop Simulator.
