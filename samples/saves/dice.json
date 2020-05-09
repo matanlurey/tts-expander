@@ -1,0 +1,2165 @@
+{
+  "SaveName": "Dice",
+  "GameMode": "Dice",
+  "Gravity": 0.5,
+  "PlayArea": 0.5,
+  "Date": "5/9/2020 2:03:36 PM",
+  "Table": "Table_RPG",
+  "Sky": "Sky_Forest",
+  "Note": "",
+  "Rules": "",
+  "XmlUI": "<!-- Xml UI. See documentation: https://api.tabletopsimulator.com/ui/introUI/ -->",
+  "LuaScript": "--[[ Lua code. See documentation: https://api.tabletopsimulator.com/ --]]\n\n--[[ The onLoad event is called after the game save finishes loading. --]]\nfunction onLoad()\n    --[[ print('onLoad!') --]]\nend\n\n--[[ The onUpdate event is called once per frame. --]]\nfunction onUpdate()\n    --[[ print('onUpdate loop!') --]]\nend",
+  "LuaScriptState": "",
+  "Grid": {
+    "Type": 0,
+    "Lines": false,
+    "Color": {
+      "r": 0.0,
+      "g": 0.0,
+      "b": 0.0
+    },
+    "Opacity": 0.75,
+    "ThickLines": false,
+    "Snapping": false,
+    "Offset": false,
+    "BothSnapping": false,
+    "xSize": 2.0,
+    "ySize": 2.0,
+    "PosOffset": {
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0
+    }
+  },
+  "Lighting": {
+    "LightIntensity": 0.54,
+    "LightColor": {
+      "r": 1.0,
+      "g": 0.9804,
+      "b": 0.8902
+    },
+    "AmbientIntensity": 1.3,
+    "AmbientType": 0,
+    "AmbientSkyColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "AmbientEquatorColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "AmbientGroundColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "ReflectionIntensity": 1.0,
+    "LutIndex": 0,
+    "LutContribution": 1.0
+  },
+  "Hands": {
+    "Enable": true,
+    "DisableUnused": false,
+    "Hiding": 0,
+    "HandTransforms": [
+      {
+        "Color": "Red",
+        "Transform": {
+          "posX": -15.1108065,
+          "posY": 4.81909943,
+          "posZ": -20.1076221,
+          "rotX": 0.0,
+          "rotY": 0.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7814407,
+          "scaleY": 9.174497,
+          "scaleZ": 4.87123871
+        }
+      },
+      {
+        "Color": "Yellow",
+        "Transform": {
+          "posX": -30.2150211,
+          "posY": 4.81909943,
+          "posZ": 10.17524,
+          "rotX": 0.0,
+          "rotY": 90.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7193813,
+          "scaleY": 9.174497,
+          "scaleZ": 4.955934
+        }
+      },
+      {
+        "Color": "Purple",
+        "Transform": {
+          "posX": 30.25128,
+          "posY": 4.81909943,
+          "posZ": 9.59069252,
+          "rotX": 0.0,
+          "rotY": 270.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7193737,
+          "scaleY": 9.174497,
+          "scaleZ": 4.955934
+        }
+      },
+      {
+        "Color": "Blue",
+        "Transform": {
+          "posX": 15.4749184,
+          "posY": 4.81909943,
+          "posZ": 19.8365288,
+          "rotX": 0.0,
+          "rotY": 179.8,
+          "rotZ": 0.0,
+          "scaleX": 11.8622293,
+          "scaleY": 9.174497,
+          "scaleZ": 4.913725
+        }
+      },
+      {
+        "Color": "White",
+        "Transform": {
+          "posX": 15.1961479,
+          "posY": 4.81909943,
+          "posZ": -20.1400986,
+          "rotX": 0.0,
+          "rotY": 0.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7814283,
+          "scaleY": 9.17449951,
+          "scaleZ": 4.87123871
+        }
+      },
+      {
+        "Color": "Green",
+        "Transform": {
+          "posX": -15.1927767,
+          "posY": 4.81909943,
+          "posZ": 19.787817,
+          "rotX": 0.0,
+          "rotY": 180.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7814283,
+          "scaleY": 9.174497,
+          "scaleZ": 4.87123871
+        }
+      },
+      {
+        "Color": "Pink",
+        "Transform": {
+          "posX": 30.10358,
+          "posY": 4.81909943,
+          "posZ": -8.449126,
+          "rotX": 0.0,
+          "rotY": 270.0,
+          "rotZ": 0.0,
+          "scaleX": 11.71937,
+          "scaleY": 9.174497,
+          "scaleZ": 4.955934
+        }
+      },
+      {
+        "Color": "Orange",
+        "Transform": {
+          "posX": -30.247818,
+          "posY": 4.81909943,
+          "posZ": -8.822588,
+          "rotX": 0.0,
+          "rotY": 90.0,
+          "rotZ": 0.0,
+          "scaleX": 11.7193842,
+          "scaleY": 9.174497,
+          "scaleZ": 4.955934
+        }
+      }
+    ]
+  },
+  "Turns": {
+    "Enable": false,
+    "Type": 0,
+    "TurnOrder": [],
+    "Reverse": false,
+    "SkipEmpty": false,
+    "DisableInteractions": false,
+    "PassTurns": true
+  },
+  "ObjectStates": [
+    {
+      "Name": "Quarter",
+      "Transform": {
+        "posX": 1.53374046E-07,
+        "posY": 1.05914259,
+        "posZ": 1.1215117E-07,
+        "rotX": 9.18889953E-07,
+        "rotY": 89.9999847,
+        "rotZ": 180.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "f5836a",
+      "RotationValues": [
+        {
+          "Value": "Heads",
+          "Rotation": {
+            "x": 0.0,
+            "y": 90.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": "Tails",
+          "Rotation": {
+            "x": 0.0,
+            "y": -90.0,
+            "z": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_4",
+      "Transform": {
+        "posX": 2.58907819,
+        "posY": 1.1715759,
+        "posZ": -4.37153959,
+        "rotX": 18.6522713,
+        "rotY": 0.276437372,
+        "rotZ": 0.02255557,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "e58b78",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 18.0,
+            "y": -241.0,
+            "z": -120.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": -90.0,
+            "y": -60.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 18.0,
+            "y": -121.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 18.0,
+            "y": 0.0,
+            "z": -240.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_4",
+      "Transform": {
+        "posX": 1.42989922,
+        "posY": 1.1711731,
+        "posZ": -1.71002352,
+        "rotX": 18.6296825,
+        "rotY": 0.288801134,
+        "rotZ": 359.956116,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "7216b6",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 18.0,
+            "y": -241.0,
+            "z": -120.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": -90.0,
+            "y": -60.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 18.0,
+            "y": -121.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 18.0,
+            "y": 0.0,
+            "z": -240.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6",
+      "Transform": {
+        "posX": 5.08894062,
+        "posY": 1.29020047,
+        "posZ": 0.0580427647,
+        "rotX": -2.56302883E-07,
+        "rotY": 1.32883826E-09,
+        "rotZ": -6.036059E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "debde4",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6_Rounded",
+      "Transform": {
+        "posX": 6.462413,
+        "posY": 1.30999982,
+        "posZ": 0.0580427647,
+        "rotX": -1.06122832E-06,
+        "rotY": 9.372836E-08,
+        "rotZ": 5.500678E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.0588639081,
+        "g": 0.0541051775,
+        "b": 0.0541051775
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "0a72a0",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6_Rounded",
+      "Transform": {
+        "posX": -6.94786835,
+        "posY": 1.30999982,
+        "posZ": 0.0580427647,
+        "rotX": -4.561358E-07,
+        "rotY": 1.02919046E-07,
+        "rotZ": 5.03223532E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.996078432,
+        "g": 0.0,
+        "b": 0.0
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "c69654",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6_Rounded",
+      "Transform": {
+        "posX": -0.02947998,
+        "posY": 1.31,
+        "posZ": 7.023817,
+        "rotX": 5.07138367E-08,
+        "rotY": -5.72756342E-10,
+        "rotZ": 5.20488356E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.0552372038,
+        "g": 0.7794118,
+        "b": 0.0
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 2,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "56ab2a",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6_Rounded",
+      "Transform": {
+        "posX": -0.02947998,
+        "posY": 1.30999982,
+        "posZ": -6.339098,
+        "rotX": -8.00828047E-07,
+        "rotY": 8.2868425E-08,
+        "rotZ": 9.350547E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.0,
+        "g": 0.4235294,
+        "b": 0.996078432
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 3,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "c61d75",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_6",
+      "Transform": {
+        "posX": 2.05473852,
+        "posY": 1.29020047,
+        "posZ": -0.193945169,
+        "rotX": -4.21205954E-07,
+        "rotY": 2.78339058E-08,
+        "rotZ": 1.11898558E-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "40aa9c",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -180.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_8",
+      "Transform": {
+        "posX": 2.54060841,
+        "posY": 1.367279,
+        "posZ": 4.417855,
+        "rotX": 0.0,
+        "rotY": 0.0,
+        "rotZ": 0.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.5647112,
+        "g": 0.08235737,
+        "b": 0.08235737
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "b15018",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -180.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_8",
+      "Transform": {
+        "posX": 0.9253739,
+        "posY": 1.367279,
+        "posZ": 1.83252168,
+        "rotX": 0.0,
+        "rotY": 0.0,
+        "rotZ": 0.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "c6a6fc",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -180.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_10",
+      "Transform": {
+        "posX": -2.51374364,
+        "posY": 1.32121027,
+        "posZ": 4.81804228,
+        "rotX": 38.5198021,
+        "rotY": 353.8708,
+        "rotZ": 343.698883,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.07451411,
+        "g": 0.415692329,
+        "b": 0.172554553
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "0634e7",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 234.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -233.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 20.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -161.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 307.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -304.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 163.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_10",
+      "Transform": {
+        "posX": -1.154888,
+        "posY": 1.32118428,
+        "posZ": 1.84708309,
+        "rotX": 38.5165634,
+        "rotY": 353.868683,
+        "rotZ": 344.221222,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "6a12b5",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 234.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -233.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 20.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -161.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 307.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -304.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": -38.0,
+            "y": 0.0,
+            "z": 163.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": 38.0,
+            "y": 180.0,
+            "z": -90.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_12",
+      "Transform": {
+        "posX": -5.138533,
+        "posY": 1.35876846,
+        "posZ": 0.200438216,
+        "rotX": 26.5405617,
+        "rotY": 359.7619,
+        "rotZ": 0.0073511363,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.8156889,
+        "g": 0.5098095,
+        "b": 0.117652006
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "081c81",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 72.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 144.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": -72.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 90.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": -144.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 36.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": -90.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 108.0
+          }
+        },
+        {
+          "Value": 11,
+          "Rotation": {
+            "x": -27.0,
+            "y": 108.0,
+            "z": -36.0
+          }
+        },
+        {
+          "Value": 12,
+          "Rotation": {
+            "x": -27.0,
+            "y": 36.0,
+            "z": -108.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_12",
+      "Transform": {
+        "posX": -1.922617,
+        "posY": 1.35875893,
+        "posZ": -0.0365421,
+        "rotX": 26.56183,
+        "rotY": 0.150523171,
+        "rotZ": 0.00387533335,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "8bfcaf",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 72.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 144.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": -72.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": 90.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": -144.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 36.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": -90.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": 27.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": -27.0,
+            "y": 180.0,
+            "z": 108.0
+          }
+        },
+        {
+          "Value": 11,
+          "Rotation": {
+            "x": -27.0,
+            "y": 108.0,
+            "z": -36.0
+          }
+        },
+        {
+          "Value": 12,
+          "Rotation": {
+            "x": -27.0,
+            "y": 36.0,
+            "z": -108.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_20",
+      "Transform": {
+        "posX": -2.594114,
+        "posY": 1.407568,
+        "posZ": -4.449177,
+        "rotX": 5.93372752E-05,
+        "rotY": 1.2112876E-05,
+        "rotZ": -7.257076E-05,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.517652631,
+        "g": 0.105887152,
+        "b": 0.6196126
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "9760a8",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -11.0,
+            "y": 60.0,
+            "z": 17.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 162.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -11.0,
+            "y": -60.0,
+            "z": 234.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 306.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 55.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 198.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 127.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": 52.0,
+            "y": -180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 11,
+          "Rotation": {
+            "x": 308.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 12,
+          "Rotation": {
+            "x": 306.0,
+            "y": -240.0,
+            "z": -52.0
+          }
+        },
+        {
+          "Value": 13,
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": 18.0
+          }
+        },
+        {
+          "Value": 14,
+          "Rotation": {
+            "x": 307.0,
+            "y": 120.0,
+            "z": 233.0
+          }
+        },
+        {
+          "Value": 15,
+          "Rotation": {
+            "x": 11.0,
+            "y": 120.0,
+            "z": -234.0
+          }
+        },
+        {
+          "Value": 16,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": 54.0
+          }
+        },
+        {
+          "Value": 17,
+          "Rotation": {
+            "x": 11.0,
+            "y": -120.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 18,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 19,
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": -198.0
+          }
+        },
+        {
+          "Value": 20,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -162.0
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Die_20",
+      "Transform": {
+        "posX": -1.1488452,
+        "posY": 1.407568,
+        "posZ": -1.9529351,
+        "rotX": 0.000111630878,
+        "rotY": -9.058173E-06,
+        "rotZ": -0.0001735028,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "ColorDiffuse": {
+        "r": 0.149030268,
+        "g": 0.301973075,
+        "b": 0.4431491
+      },
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "AltSound": true,
+      "MaterialIndex": 1,
+      "XmlUI": "",
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "GUID": "024af2",
+      "RotationValues": [
+        {
+          "Value": 1,
+          "Rotation": {
+            "x": -11.0,
+            "y": 60.0,
+            "z": 17.0
+          }
+        },
+        {
+          "Value": 2,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 3,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 4,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 162.0
+          }
+        },
+        {
+          "Value": 5,
+          "Rotation": {
+            "x": -11.0,
+            "y": -60.0,
+            "z": 234.0
+          }
+        },
+        {
+          "Value": 6,
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 306.0
+          }
+        },
+        {
+          "Value": 7,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 55.0
+          }
+        },
+        {
+          "Value": 8,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 198.0
+          }
+        },
+        {
+          "Value": 9,
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 127.0
+          }
+        },
+        {
+          "Value": 10,
+          "Rotation": {
+            "x": 52.0,
+            "y": -180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 11,
+          "Rotation": {
+            "x": 308.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": 12,
+          "Rotation": {
+            "x": 306.0,
+            "y": -240.0,
+            "z": -52.0
+          }
+        },
+        {
+          "Value": 13,
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": 18.0
+          }
+        },
+        {
+          "Value": 14,
+          "Rotation": {
+            "x": 307.0,
+            "y": 120.0,
+            "z": 233.0
+          }
+        },
+        {
+          "Value": 15,
+          "Rotation": {
+            "x": 11.0,
+            "y": 120.0,
+            "z": -234.0
+          }
+        },
+        {
+          "Value": 16,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": 54.0
+          }
+        },
+        {
+          "Value": 17,
+          "Rotation": {
+            "x": 11.0,
+            "y": -120.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": 18,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": 19,
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": -198.0
+          }
+        },
+        {
+          "Value": 20,
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -162.0
+          }
+        }
+      ]
+    }
+  ],
+  "DecalPallet": [],
+  "TabStates": {
+    "0": {
+      "title": "Rules",
+      "body": "",
+      "color": "Grey",
+      "visibleColor": {
+        "r": 0.5,
+        "g": 0.5,
+        "b": 0.5
+      },
+      "id": 0
+    },
+    "1": {
+      "title": "White",
+      "body": "",
+      "color": "White",
+      "visibleColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "id": 1
+    },
+    "2": {
+      "title": "Brown",
+      "body": "",
+      "color": "Brown",
+      "visibleColor": {
+        "r": 0.443,
+        "g": 0.231,
+        "b": 0.09
+      },
+      "id": 2
+    },
+    "3": {
+      "title": "Red",
+      "body": "",
+      "color": "Red",
+      "visibleColor": {
+        "r": 0.856,
+        "g": 0.1,
+        "b": 0.094
+      },
+      "id": 3
+    },
+    "4": {
+      "title": "Orange",
+      "body": "",
+      "color": "Orange",
+      "visibleColor": {
+        "r": 0.956,
+        "g": 0.392,
+        "b": 0.113
+      },
+      "id": 4
+    },
+    "5": {
+      "title": "Yellow",
+      "body": "",
+      "color": "Yellow",
+      "visibleColor": {
+        "r": 0.905,
+        "g": 0.898,
+        "b": 0.172
+      },
+      "id": 5
+    },
+    "6": {
+      "title": "Green",
+      "body": "",
+      "color": "Green",
+      "visibleColor": {
+        "r": 0.192,
+        "g": 0.701,
+        "b": 0.168
+      },
+      "id": 6
+    },
+    "7": {
+      "title": "Blue",
+      "body": "",
+      "color": "Blue",
+      "visibleColor": {
+        "r": 0.118,
+        "g": 0.53,
+        "b": 1.0
+      },
+      "id": 7
+    },
+    "8": {
+      "title": "Teal",
+      "body": "",
+      "color": "Teal",
+      "visibleColor": {
+        "r": 0.129,
+        "g": 0.694,
+        "b": 0.607
+      },
+      "id": 8
+    },
+    "9": {
+      "title": "Purple",
+      "body": "",
+      "color": "Purple",
+      "visibleColor": {
+        "r": 0.627,
+        "g": 0.125,
+        "b": 0.941
+      },
+      "id": 9
+    },
+    "10": {
+      "title": "Pink",
+      "body": "",
+      "color": "Pink",
+      "visibleColor": {
+        "r": 0.96,
+        "g": 0.439,
+        "b": 0.807
+      },
+      "id": 10
+    },
+    "11": {
+      "title": "Black",
+      "body": "",
+      "color": "Black",
+      "visibleColor": {
+        "r": 0.25,
+        "g": 0.25,
+        "b": 0.25
+      },
+      "id": 11
+    }
+  },
+  "VersionNumber": "v12.3.5"
+}
