@@ -23,7 +23,7 @@
     }
   },
 
-  "required": ["Object", "ContainedObjectPaths", "StatesPaths"],
+  "required": ["Object"],
 
   "additionalProperties": false
 }

@@ -30,7 +30,7 @@ export interface SplitState<
   /**
    * Child objects, in order of appereance.
    */
-  children: Array<{
+  children?: Array<{
     contents: SplitObjectState;
     filePath: string;
   }>;
@@ -98,7 +98,14 @@ function copySaveWithoutDuplicateNodes(
 }
 
 function defaultName(object: ObjectState): string {
-  return `${object.Name}.${object.GUID}`;
+  let name = `${object.Name}`;
+  if (object.GUID) {
+    name = `${name}.${object.GUID}`;
+  }
+  if (object.CardID || object.CardID === 0) {
+    name = `${name}.${object.CardID}`;
+  }
+  return name;
 }
 
 function splitStates(
@@ -166,14 +173,16 @@ export function splitObject(
       contents: copyObjectWithoutDuplicateNodes(object, objectName),
       filePath: `${objectName}.json`,
     },
-    children: (object.ContainedObjects || []).map((o) => {
+    states: splitStates(object.States || {}, splitObject, name),
+  };
+  if (object.ContainedObjects) {
+    result.children = object.ContainedObjects?.map((o) => {
       return {
         filePath: `${name(o)}.json`,
         contents: splitObject(o),
       };
-    }),
-    states: splitStates(object.States || {}, splitObject, name),
-  };
+    });
+  }
   if (object.LuaScript) {
     result.luaScript = splitLua(object, objectName);
   }
@@ -245,7 +254,7 @@ export class SplitIO {
   private toEncodedSave(data: SplitSaveState): ExpandedSaveState {
     return {
       Save: data.metadata.contents as SaveState,
-      ObjectPaths: data.children.map((c) => c.filePath),
+      ObjectPaths: data.children?.map((c) => c.filePath) || [],
     };
   }
 
@@ -254,11 +263,14 @@ export class SplitIO {
     for (const k in data.states) {
       StatePaths[k] = data.states[k].filePath;
     }
-    return {
+    const result: ExpandedObjectState = {
       Object: data.metadata.contents as ObjectState,
-      ContainedObjectPaths: data.children.map((c) => c.filePath),
       StatesPaths: StatePaths,
     };
+    if (data.children) {
+      result.ContainedObjectPaths = data.children.map((c) => c.filePath);
+    }
+    return result;
   }
 
   private async writeSplitSave(
@@ -340,7 +352,8 @@ export class SplitIO {
       ...save.metadata.contents,
       LuaScript: save.luaScript?.contents || '',
       XmlUI: save.xmlUi?.contents || '',
-      ObjectStates: save.children.map((c) => this.collapseObject(c.contents)),
+      ObjectStates:
+        save.children?.map((c) => this.collapseObject(c.contents)) || [],
     } as SaveState;
   }
 
@@ -349,12 +362,11 @@ export class SplitIO {
       ...object.metadata.contents,
       LuaScript: object.luaScript?.contents || '',
       XmlUI: object.xmlUi?.contents || '',
-      ContainedObjects: object.children.map((c) =>
-        this.collapseObject(c.contents),
-      ),
     } as ObjectState;
-    if (!result.ContainedObjects?.length) {
-      delete result.ContainedObjects;
+    if (object.children) {
+      result.ContainedObjects = object.children.map((c) =>
+        this.collapseObject(c.contents),
+      );
     }
     if (Object.keys(object.states).length) {
       const states: { [k: string]: ObjectState } = {};
@@ -389,12 +401,19 @@ export class SplitIO {
 
   private async readExtractedSave(file: string): Promise<SplitSaveState> {
     const entry = (await this.readJson(file)) as ExpandedSaveState;
-    return {
+    const result: SplitSaveState = {
       metadata: {
         contents: entry.Save,
         filePath: path.basename(file),
       },
-      children: await Promise.all(
+      luaScript: await this.readIncludes(
+        path.dirname(file),
+        entry.Save.LuaScript,
+      ),
+      xmlUi: await this.readIncludes(path.dirname(file), entry.Save.XmlUI),
+    };
+    if (entry.ObjectPaths) {
+      result.children = await Promise.all(
         entry.ObjectPaths.map(async (relative) => {
           const target = path.join(
             path.dirname(file),
@@ -406,13 +425,9 @@ export class SplitIO {
             contents: await this.readExtractedObject(target),
           };
         }),
-      ),
-      luaScript: await this.readIncludes(
-        path.dirname(file),
-        entry.Save.LuaScript,
-      ),
-      xmlUi: await this.readIncludes(path.dirname(file), entry.Save.XmlUI),
-    };
+      );
+    }
+    return result;
   }
 
   private async readExtractedObject(file: string): Promise<SplitObjectState> {
@@ -434,12 +449,20 @@ export class SplitIO {
         contents: await this.readExtractedObject(target),
       };
     }
-    return {
+    const result: SplitObjectState = {
       metadata: {
         contents: entry.Object,
         filePath: path.basename(file),
       },
-      children: await Promise.all(
+      states,
+      luaScript: await this.readIncludes(
+        path.dirname(file),
+        entry.Object.LuaScript,
+      ),
+      xmlUi: await this.readIncludes(path.dirname(file), entry.Object.XmlUI),
+    };
+    if (entry.ContainedObjectPaths) {
+      result.children = await Promise.all(
         entry.ContainedObjectPaths.map(async (relative) => {
           const target = path.join(
             path.dirname(file),
@@ -451,13 +474,8 @@ export class SplitIO {
             contents: await this.readExtractedObject(target),
           };
         }),
-      ),
-      states,
-      luaScript: await this.readIncludes(
-        path.dirname(file),
-        entry.Object.LuaScript,
-      ),
-      xmlUi: await this.readIncludes(path.dirname(file), entry.Object.XmlUI),
-    };
+      );
+    }
+    return result;
   }
 }

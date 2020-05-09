@@ -7,8 +7,8 @@ import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 
 export interface ExpandedObjectState {
   Object: ObjectState;
-  ContainedObjectPaths: string[];
-  StatesPaths: {
+  ContainedObjectPaths?: string[];
+  StatesPaths?: {
     [k: string]: string;
   };
 }
@@ -17,5 +17,5 @@ export interface ExpandedObjectState {
 
 export interface ExpandedSaveState {
   Save: SaveState;
-  ObjectPaths: string[];
+  ObjectPaths?: string[];
 }

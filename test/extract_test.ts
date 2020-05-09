@@ -45,7 +45,6 @@ test('should split a simple object, retaining metadata', () => {
       contents: data,
       filePath: 'Pawn.123456.json',
     },
-    children: [],
     states: {},
   };
   expect(splitObject(data)).toEqual(expected);
@@ -64,7 +63,6 @@ test('should split an object with Lua', () => {
       contents: copy,
       filePath: 'Pawn.123456.json',
     },
-    children: [],
     states: {},
     luaScript: {
       contents: 'print("Hello World")',
@@ -87,7 +85,6 @@ test('should split an object with XML', () => {
       contents: copy,
       filePath: 'Pawn.123456.json',
     },
-    children: [],
     states: {},
     xmlUi: {
       contents: '<Ui>Hello</Ui>',
@@ -131,7 +128,6 @@ test('should split an object with ContainedObjects', () => {
             filePath: 'Pawn.10001.json',
           },
           states: {},
-          children: [],
         },
         filePath: 'Pawn.10001.json',
       },
@@ -142,7 +138,6 @@ test('should split an object with ContainedObjects', () => {
             filePath: 'Pawn.10002.json',
           },
           states: {},
-          children: [],
         },
         filePath: 'Pawn.10002.json',
       },
@@ -181,7 +176,6 @@ test('should split an object with States', () => {
       contents: copy,
       filePath: 'Token.10000.json',
     },
-    children: [],
     states: {
       1: {
         contents: {
@@ -190,7 +184,6 @@ test('should split an object with States', () => {
             filePath: 'Token.10001.json',
           },
           states: {},
-          children: [],
         },
         filePath: 'Token.10001.json',
       },
@@ -201,13 +194,83 @@ test('should split an object with States', () => {
             filePath: 'Token.10002.json',
           },
           states: {},
-          children: [],
         },
         filePath: 'Token.10002.json',
       },
     },
   };
   expect(splitObject(data)).toEqual(expected);
+});
+
+test('should split an object that is deck-like', () => {
+  const card0: ObjectState = {
+    Name: 'Card',
+    GUID: '20000',
+    CardID: 0,
+    ...commonObjectProps,
+  };
+  const card1: ObjectState = {
+    Name: 'Card',
+    GUID: '20000',
+    CardID: 1,
+    ...commonObjectProps,
+  };
+  const card2: ObjectState = {
+    Name: 'Card',
+    GUID: '20000',
+    CardID: 2,
+    ...commonObjectProps,
+  };
+  const deck: ObjectState = {
+    Name: 'Deck',
+    GUID: '10000',
+    DeckIDs: [2, 0, 1],
+    ContainedObjects: [card2, card0, card1],
+    ...commonObjectProps,
+  };
+  const expected: SplitObjectState = {
+    metadata: {
+      contents: {
+        ...deck,
+        ContainedObjects: [],
+      },
+      filePath: 'Deck.10000.json',
+    },
+    children: [
+      {
+        contents: {
+          metadata: {
+            contents: card2,
+            filePath: 'Card.20000.2.json',
+          },
+          states: {},
+        },
+        filePath: 'Card.20000.2.json',
+      },
+      {
+        contents: {
+          metadata: {
+            contents: card0,
+            filePath: 'Card.20000.0.json',
+          },
+          states: {},
+        },
+        filePath: 'Card.20000.0.json',
+      },
+      {
+        contents: {
+          metadata: {
+            contents: card1,
+            filePath: 'Card.20000.1.json',
+          },
+          states: {},
+        },
+        filePath: 'Card.20000.1.json',
+      },
+    ],
+    states: {},
+  };
+  expect(splitObject(deck)).toEqual(expected);
 });
 
 test('should split a save file with a child object', () => {
@@ -316,7 +379,6 @@ test('should split a save file with a child object', () => {
             filePath: 'Pawn.123456.json',
           },
           states: {},
-          children: [],
         },
         filePath: 'Pawn.123456.json',
       },

@@ -17,7 +17,7 @@
     }
   },
 
-  "required": ["Save", "ObjectPaths"],
+  "required": ["Save"],
 
   "additionalProperties": false
 }

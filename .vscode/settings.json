@@ -33,12 +33,12 @@
         "samples/sources/Checkers.json",
         "samples/sources/Tools.json"
       ],
-      "url": "./src/schema/VarnishSaveState.json"
+      "url": "./src/schema/ExpandedSaveState.json"
     },
 
     {
       "fileMatch": ["samples/sources/*/**/*.json"],
-      "url": "./src/schema/VarnishObjectState.json"
+      "url": "./src/schema/ExpandedObjectState.json"
     }
   ],
 
