@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "Development tool for Tabletop Simulator",
   "scripts": {
-    "fix": "prettier --write . --ignore-path .gitignore && eslint --fix src test --ext .ts",
+    "fix": "prettier --write . --ignore-path .prettierignore && eslint --fix src test --ext .ts",
     "generate": "ts-node tool/generate.ts --output \"./src/schema.d.ts\"",
-    "lint": "prettier --ignore-path .gitignore --list-different src && eslint src test --ext .ts",
+    "lint": "prettier --ignore-path .prettierignore --list-different src && eslint src test --ext .ts",
     "test": "jest",
     "validate": "ts-node tool/validate.ts"
   },
