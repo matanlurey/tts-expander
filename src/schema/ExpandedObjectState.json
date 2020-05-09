@@ -1,8 +1,8 @@
 {
-  "$id": "https://varnish.tts.slwegion.dev/VarnishObjectState.json",
+  "$id": "https://varnish.tts.slwegion.dev/ExpandedObjectState.json",
   "$schema": "http://json-schema.org/draft-07/schema",
 
-  "title": "VarnishObjectState",
+  "title": "ExpandedObjectState",
   "type": "object",
 
   "properties": {
