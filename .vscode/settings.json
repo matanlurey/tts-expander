@@ -26,6 +26,19 @@
     {
       "fileMatch": ["samples/saves/*.json"],
       "url": "./node_modules/@matanlurey/tts-save-format/src/schema/SaveState.json"
+    },
+
+    {
+      "fileMatch": [
+        "samples/sources/Checkers.json",
+        "samples/sources/Tools.json"
+      ],
+      "url": "./src/schema/VarnishSaveState.json"
+    },
+
+    {
+      "fileMatch": ["samples/sources/*/**/*.json"],
+      "url": "./src/schema/VarnishObjectState.json"
     }
   ],
 

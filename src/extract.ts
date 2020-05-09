@@ -1,6 +1,7 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 import * as fs from 'fs-extra';
 import path from 'path';
+import { VarnishObjectState, VarnishSaveState } from './schema';
 
 export type SplitFragment = {
   contents: string;
@@ -16,14 +17,13 @@ export interface SplitState<
   T extends {
     LuaScript?: string;
     XmlUI?: string;
-  },
-  O extends Partial<T>
+  }
 > {
   /**
    * Partial metadata specific to object `T`.
    */
   metadata: {
-    contents: O;
+    contents: Partial<T>;
     filePath: string;
   };
 
@@ -46,14 +46,7 @@ export interface SplitState<
   xmlUi?: SplitFragment;
 }
 
-type ObjectParts = {
-  ContainedObjects?: ObjectState[];
-  LuaScript?: string;
-  States?: { [key: string]: ObjectState };
-  XmlUI?: string;
-};
-
-export interface SplitObjectState extends SplitState<ObjectState, ObjectParts> {
+export interface SplitObjectState extends SplitState<ObjectState> {
   /**
    * Swappable states, if any.
    */
@@ -65,13 +58,7 @@ export interface SplitObjectState extends SplitState<ObjectState, ObjectParts> {
   };
 }
 
-type SaveParts = {
-  ContainedObjects?: SplitObjectState[];
-  LuaScript?: string;
-  XmlUI?: string;
-};
-
-export type SplitSaveState = SplitState<SaveState, SaveParts>;
+export type SplitSaveState = SplitState<SaveState>;
 
 function copyObjectWithoutDuplicateNodes(
   object: ObjectState,
@@ -231,6 +218,7 @@ export class SplitIO {
   constructor(
     private readonly readFile = fs.readFile,
     private readonly writeFile = fs.writeFile,
+    private readonly mkdirp = fs.mkdirp,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -254,12 +242,31 @@ export class SplitIO {
     return this.writeSplitSave(to, data);
   }
 
+  private toEncodedSave(data: SplitSaveState): VarnishSaveState {
+    return {
+      Save: data.metadata.contents as SaveState,
+      ObjectPaths: data.children.map((c) => c.filePath),
+    };
+  }
+
+  private toEncodedObject(data: SplitObjectState): VarnishObjectState {
+    const StatePaths: { [key: string]: string } = {};
+    for (const k in data.states) {
+      StatePaths[k] = data.states[k].filePath;
+    }
+    return {
+      Object: data.metadata.contents as ObjectState,
+      ContainedObjectPaths: data.children.map((c) => c.filePath),
+      StatesPaths: StatePaths,
+    };
+  }
+
   private async writeSplitSave(
     to: string,
     data: SplitSaveState,
   ): Promise<void> {
     const outJson = path.join(to, data.metadata.filePath);
-    await this.writeJson(outJson, data.metadata.contents);
+    await this.writeJson(outJson, this.toEncodedSave(data));
 
     if (data.luaScript) {
       const outLua = path.join(to, data.luaScript.filePath);
@@ -271,10 +278,12 @@ export class SplitIO {
       await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
     }
 
-    if (data.children) {
-      const outChild = path.join(to, path.basename(data.metadata.filePath));
+    if (data.children && data.children.length) {
+      const outChild = path.join(to, data.metadata.filePath.split('.')[0]);
+      await this.mkdirp(outChild);
       await Promise.all(
-        data.children.map((c) => this.writeSplitObject(outChild, c.contents)),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        data.children.map((c) => this.writeSplitObject(outChild, c.contents!)),
       );
     }
   }
@@ -284,7 +293,7 @@ export class SplitIO {
     data: SplitObjectState,
   ): Promise<void> {
     const outJson = path.join(to, data.metadata.filePath);
-    await this.writeJson(outJson, data.metadata.contents);
+    await this.writeJson(outJson, this.toEncodedObject(data));
 
     if (data.luaScript) {
       const outLua = path.join(to, data.luaScript.filePath);
@@ -296,21 +305,25 @@ export class SplitIO {
       await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
     }
 
-    if (data.children) {
-      const outChild = path.join(to, path.basename(data.metadata.filePath));
+    if (data.children && data.children.length) {
+      const outChild = path.join(to, data.metadata.filePath.split('.')[0]);
+      await this.mkdirp(outChild);
       await Promise.all(
-        data.children.map((c) => this.writeSplitObject(outChild, c.contents)),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        data.children.map((c) => this.writeSplitObject(outChild, c.contents!)),
       );
     }
 
-    if (data.states) {
+    if (data.states && Object.keys(data.states).length) {
       const outStates = path.join(
         to,
-        `${path.basename(data.metadata.filePath)}.states`,
+        `${data.metadata.filePath.split('.')[0]}.states`,
       );
+      await this.mkdirp(outStates);
       await Promise.all(
         Object.entries(data.states).map((c) =>
-          this.writeSplitObject(outStates, c[1].contents),
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this.writeSplitObject(outStates, c[1].contents!),
         ),
       );
     }

@@ -30,5 +30,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Validate
+        run: npm run validate
+
       - name: Test
         run: npm test
