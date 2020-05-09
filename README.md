@@ -89,16 +89,16 @@ metadata). To be able to piece this object back together into an `ObjectState`
 you would need to load additional files and inline them back into the original
 metadata.
 
-```json
+```js
 {
   "Object": {
     "Name": "Block",
     "GUID": "abcdef",
-    ...
+    // ...
     // Scripts and XML is changed to an #include reference to another file.
     "LuaScript": "#include Block.lua",
     "XmlUI": "#include Block.xml",
-    ...
+    // ...
     // Rest of the metadata.
     // Notably `ContainedObjects` and `States` has been purged.
    },
@@ -106,13 +106,13 @@ metadata.
     // Files that contain the metadata for ContainedObjects.
     "Object-1.json",
     "Object-2.json",
-    ...
+    // ...
   ],
   "StatesPaths": {
     // Files that contain the metadata for States.
     "1": "State-1.json",
     "2": "State-2.json",
-    ...
+    // ...
   }
 }
 ```
@@ -121,15 +121,15 @@ metadata.
 
 Similarly, `ExpandedSaveState` references a [`SaveState`][5].
 
-```json
+```js
 {
   "Save": {
     "Name": "Game",
-    ...
+    // ...
     // Scripts and XML is changed to an #include reference to another file.
     "LuaScript": "#include Game.lua",
     "XmlUI": "#include Game.xml",
-    ...
+    // ...
     // Rest of the metadata.
     // Notably `ContainedObjects` and `States` has been purged.
    },
