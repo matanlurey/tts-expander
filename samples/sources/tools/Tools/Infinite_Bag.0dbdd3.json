@@ -1,0 +1,43 @@
+{
+  "Object": {
+    "Name": "Infinite_Bag",
+    "Transform": {
+      "posX": 8.5,
+      "posY": 0.94299984,
+      "posZ": -8.5,
+      "rotX": -2.43644465e-8,
+      "rotY": 4.78446838e-9,
+      "rotZ": -1.70305611e-7,
+      "scaleX": 1,
+      "scaleY": 1,
+      "scaleZ": 1
+    },
+    "Nickname": "",
+    "Description": "",
+    "GMNotes": "",
+    "ColorDiffuse": {
+      "r": 0.3058885,
+      "g": 0.372555166,
+      "b": 1
+    },
+    "Locked": false,
+    "Grid": true,
+    "Snap": true,
+    "IgnoreFoW": false,
+    "Autoraise": true,
+    "Sticky": true,
+    "Tooltip": true,
+    "GridProjection": false,
+    "HideWhenFaceDown": false,
+    "Hands": false,
+    "MaterialIndex": -1,
+    "MeshIndex": -1,
+    "Number": 99,
+    "XmlUI": "",
+    "LuaScript": "",
+    "LuaScriptState": "",
+    "GUID": "0dbdd3"
+  },
+  "ContainedObjectPaths": [],
+  "StatesPaths": {}
+}
