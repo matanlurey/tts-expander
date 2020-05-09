@@ -1,4 +1,6 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
+import * as fs from 'fs-extra';
+import path from 'path';
 
 export type SplitFragment = {
   contents: string;
@@ -220,4 +222,97 @@ export default function splitSave(
     result.xmlUi = splitXml(save, save.SaveName);
   }
   return result;
+}
+
+/**
+ * Handles reading/wrting split states to disk or other locations.
+ */
+export class SplitIO {
+  constructor(
+    private readonly readFile = fs.readFile,
+    private readonly writeFile = fs.writeFile,
+  ) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private async readJson(file: string): Promise<any> {
+    return JSON.parse(await this.readFile(file, 'utf-8'));
+  }
+
+  private async writeJson(file: string, content: {}): Promise<void> {
+    return this.writeFile(
+      file,
+      JSON.stringify(content, undefined, '  '),
+      'utf-8',
+    );
+  }
+
+  async readSaveAndSplit(file: string): Promise<SplitSaveState> {
+    return splitSave(await this.readJson(file));
+  }
+
+  async writeSplit(to: string, data: SplitSaveState): Promise<void> {
+    return this.writeSplitSave(to, data);
+  }
+
+  private async writeSplitSave(
+    to: string,
+    data: SplitSaveState,
+  ): Promise<void> {
+    const outJson = path.join(to, data.metadata.filePath);
+    await this.writeJson(outJson, data.metadata.contents);
+
+    if (data.luaScript) {
+      const outLua = path.join(to, data.luaScript.filePath);
+      await this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+    }
+
+    if (data.xmlUi) {
+      const outLua = path.join(to, data.xmlUi.filePath);
+      await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+    }
+
+    if (data.children) {
+      const outChild = path.join(to, path.basename(data.metadata.filePath));
+      await Promise.all(
+        data.children.map((c) => this.writeSplitObject(outChild, c.contents)),
+      );
+    }
+  }
+
+  private async writeSplitObject(
+    to: string,
+    data: SplitObjectState,
+  ): Promise<void> {
+    const outJson = path.join(to, data.metadata.filePath);
+    await this.writeJson(outJson, data.metadata.contents);
+
+    if (data.luaScript) {
+      const outLua = path.join(to, data.luaScript.filePath);
+      await this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+    }
+
+    if (data.xmlUi) {
+      const outLua = path.join(to, data.xmlUi.filePath);
+      await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+    }
+
+    if (data.children) {
+      const outChild = path.join(to, path.basename(data.metadata.filePath));
+      await Promise.all(
+        data.children.map((c) => this.writeSplitObject(outChild, c.contents)),
+      );
+    }
+
+    if (data.states) {
+      const outStates = path.join(
+        to,
+        `${path.basename(data.metadata.filePath)}.states`,
+      );
+      await Promise.all(
+        Object.entries(data.states).map((c) =>
+          this.writeSplitObject(outStates, c[1].contents),
+        ),
+      );
+    }
+  }
 }

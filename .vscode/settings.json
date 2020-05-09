@@ -24,7 +24,7 @@
   // Schema Validation.
   "json.schemas": [
     {
-      "fileMatch": ["samples/*.json"],
+      "fileMatch": ["samples/saves/*.json"],
       "url": "./node_modules/@matanlurey/tts-save-format/src/schema/SaveState.json"
     }
   ],
