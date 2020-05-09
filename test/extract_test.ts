@@ -1,9 +1,10 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
-import splitSave, {
+import {
   splitObject,
   SplitObjectState,
+  splitSave,
   SplitSaveState,
-} from '../src/extract';
+} from '../src';
 
 const commonObjectProps = {
   Transform: {

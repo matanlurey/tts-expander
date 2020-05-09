@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import path from 'path';
-import { SplitIO } from '../src/extract';
+import { SplitIO } from '../src';
 
 const io = new SplitIO();
 

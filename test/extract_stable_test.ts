@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
-import { SplitIO } from '../src/extract';
+import { SplitIO } from '../src';
 
 let workDir: string;
 
