@@ -18,7 +18,7 @@ const commonObjectProps = {
     scaleY: 7,
     scaleZ: 8,
   },
-  Nickname: 'Black Pawn',
+  Nickname: '',
   Description: 'A Pawn',
   GMNotes: 'My favorite piece',
   IgnoreFoW: false,
