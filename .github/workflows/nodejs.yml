@@ -70,5 +70,5 @@ jobs:
         env:
           REPO: self
           BRANCH: dist
-          FOLDER: .
+          FOLDER: ./
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
