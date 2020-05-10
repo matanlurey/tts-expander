@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -15,10 +18,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const filenamify_1 = __importDefault(require("filenamify"));
 const fs = __importStar(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
 function copyObjectWithoutDuplicateNodes(object, name) {
@@ -50,17 +51,34 @@ function copySaveWithoutDuplicateNodes(save, name) {
     }
     return copy;
 }
-function defaultName(object) {
-    let name = `${object.Name}`;
+function nameObject(object) {
+    // Determine base name.
+    const { Name, Nickname } = object;
+    let name = Nickname && Nickname.trim().length ? `${Nickname}` : `${Name}`;
+    // Remove brackets and parentheses and some punctuation.
+    name = name.replace(/\]|\[|\)|\(|\,|\'/g, '_');
+    // Sanitize filename.
+    name = filenamify_1.default(name, { replacement: '_' });
+    // Normalize spaces and periods.
+    name = name.trim();
+    name = name.replace(/\s/g, '_');
+    name = name.replace(/_+/g, '_');
+    name = name.replace(/\.+/g, '.');
+    // Remove trailing and leading underscores.
+    name = name.replace(/(^[_]+)|([_]+$.])/g, '');
+    // Add a unique GUID and/or CardID.
     if (object.GUID) {
         name = `${name}.${object.GUID}`;
     }
     if (object.CardID || object.CardID === 0) {
         name = `${name}.${object.CardID}`;
     }
+    // Remove trailing and leading periods.
+    name = name.replace(/(^[.]+)|([.]+$.])/g, '');
     return name;
 }
-function splitStates(states, split, name = defaultName) {
+exports.nameObject = nameObject;
+function splitStates(states, split, name = nameObject) {
     const result = {};
     for (const state in states) {
         result[state] = {
@@ -85,7 +103,7 @@ function splitXml(input, name) {
 /**
  * Returns the provided @param object split into a tree of @returns {SplitObjectState}.
  */
-function splitObject(object, name = defaultName) {
+function splitObject(object, name = nameObject) {
     var _a;
     const objectName = name(object);
     const result = {
@@ -115,7 +133,7 @@ exports.splitObject = splitObject;
 /**
  * Returns the provided @param save split into a tree of @returns {SplitSaveState}.
  */
-function splitSave(save, name = defaultName) {
+function splitSave(save, name = nameObject) {
     const result = {
         metadata: {
             contents: copySaveWithoutDuplicateNodes(save, save.SaveName),

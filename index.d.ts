@@ -49,15 +49,15 @@ export interface SplitObjectState extends SplitState<ObjectState> {
     };
 }
 export declare type SplitSaveState = SplitState<SaveState>;
-declare function defaultName(object: ObjectState): string;
+export declare function nameObject(object: ObjectState): string;
 /**
  * Returns the provided @param object split into a tree of @returns {SplitObjectState}.
  */
-export declare function splitObject(object: ObjectState, name?: typeof defaultName): SplitObjectState;
+export declare function splitObject(object: ObjectState, name?: typeof nameObject): SplitObjectState;
 /**
  * Returns the provided @param save split into a tree of @returns {SplitSaveState}.
  */
-export declare function splitSave(save: SaveState, name?: typeof defaultName): SplitSaveState;
+export declare function splitSave(save: SaveState, name?: typeof nameObject): SplitSaveState;
 /**
  * Handles reading/wrting split states to disk or other locations.
  */
