@@ -1,4 +1,5 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
+import namify from 'filenamify';
 import * as fs from 'fs-extra';
 import path from 'path';
 import { ExpandedObjectState, ExpandedSaveState } from './schema';
@@ -99,14 +100,37 @@ function copySaveWithoutDuplicateNodes(
   return copy;
 }
 
-function defaultName(object: ObjectState): string {
-  let name = `${object.Name}`;
+export function nameObject(object: ObjectState): string {
+  // Determine base name.
+  const { Name, Nickname } = object;
+  let name = Nickname && Nickname.trim().length ? `${Nickname}` : `${Name}`;
+
+  // Remove brackets and parentheses and some punctuation.
+  name = name.replace(/\]|\[|\)|\(|\,|\'/g, '_');
+
+  // Sanitize filename.
+  name = namify(name, { replacement: '_' });
+
+  // Normalize spaces and periods.
+  name = name.trim();
+  name = name.replace(/\s/g, '_');
+  name = name.replace(/_+/g, '_');
+  name = name.replace(/\.+/g, '.');
+
+  // Remove trailing and leading underscores.
+  name = name.replace(/(^[_]+)|([_]+$.])/g, '');
+
+  // Add a unique GUID and/or CardID.
   if (object.GUID) {
     name = `${name}.${object.GUID}`;
   }
   if (object.CardID || object.CardID === 0) {
     name = `${name}.${object.CardID}`;
   }
+
+  // Remove trailing and leading periods.
+  name = name.replace(/(^[.]+)|([.]+$.])/g, '');
+
   return name;
 }
 
@@ -116,7 +140,7 @@ function splitStates(
     object: ObjectState,
     name: (object: ObjectState) => string,
   ) => SplitObjectState,
-  name = defaultName,
+  name = nameObject,
 ): {
   [key: string]: {
     contents: SplitObjectState;
@@ -167,7 +191,7 @@ function splitXml(
  */
 export function splitObject(
   object: ObjectState,
-  name = defaultName,
+  name = nameObject,
 ): SplitObjectState {
   const objectName = name(object);
   const result: SplitObjectState = {
@@ -197,7 +221,7 @@ export function splitObject(
 /**
  * Returns the provided @param save split into a tree of @returns {SplitSaveState}.
  */
-export function splitSave(save: SaveState, name = defaultName): SplitSaveState {
+export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   const result: SplitSaveState = {
     metadata: {
       contents: copySaveWithoutDuplicateNodes(save, save.SaveName),
