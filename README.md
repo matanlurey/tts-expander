@@ -1,5 +1,7 @@
 # tts-expander
 
+![Node.js CI](https://github.com/matanlurey/tts-expander/workflows/Node.js%20CI/badge.svg)
+
 Node.js library for expanding and collapsing the [save-file format][1] for
 [Tabletop Simulator][2].
 
