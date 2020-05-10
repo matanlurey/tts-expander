@@ -3,6 +3,8 @@ import * as fs from 'fs-extra';
 import path from 'path';
 import { ExpandedObjectState, ExpandedSaveState } from './schema';
 
+export { ExpandedObjectState, ExpandedSaveState } from './schema';
+
 export type SplitFragment = {
   contents: string;
   filePath: string;

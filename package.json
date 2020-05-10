@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "description": "Expands and collapses the save-file format for Tabletop Simulator",
   "scripts": {
+    "build": "tsc --build tsconfig.dist.json",
     "fix": "prettier --write . --ignore-path .prettierignore && eslint --fix src test --ext .ts",
-    "generate": "ts-node tool/generate.ts --output \"./src/schema.d.ts\"",
+    "generate": "ts-node tool/generate.ts --output \"./src/schema.ts\"",
     "lint": "prettier --ignore-path .prettierignore --list-different src && eslint src test --ext .ts",
     "test": "jest",
     "validate": "ts-node tool/validate.ts"
