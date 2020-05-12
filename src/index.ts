@@ -476,10 +476,11 @@ export class SplitIO {
       const target = path.join(
         path.dirname(file),
         path.basename(file).split('.')[0],
+        '.States',
         entry.StatesPaths[k],
       );
       states[k] = {
-        filePath: `${path.basename(target)}.States`,
+        filePath: path.basename(target),
         contents: await this.readExtractedObject(target),
       };
     }
