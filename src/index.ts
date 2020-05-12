@@ -475,8 +475,7 @@ export class SplitIO {
     for (const k in entry.StatesPaths) {
       const target = path.join(
         path.dirname(file),
-        path.basename(file).split('.')[0],
-        '.States',
+        path.basename(file).split('.')[0] + '.States',
         entry.StatesPaths[k],
       );
       states[k] = {
