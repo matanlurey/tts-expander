@@ -335,9 +335,9 @@ class SplitIO {
             const entry = (yield this.readJson(file));
             const states = {};
             for (const k in entry.StatesPaths) {
-                const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0], entry.StatesPaths[k]);
+                const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0], '.States', entry.StatesPaths[k]);
                 states[k] = {
-                    filePath: `${path_1.default.basename(target)}.States`,
+                    filePath: path_1.default.basename(target),
                     contents: yield this.readExtractedObject(target),
                 };
             }
