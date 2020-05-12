@@ -362,7 +362,7 @@ export class SplitIO {
     if (data.states && Object.keys(data.states).length) {
       const outStates = path.join(
         to,
-        `${data.metadata.filePath.split('.')[0]}.states`,
+        `${data.metadata.filePath.split('.')[0]}.States`,
       );
       await this.mkdirp(outStates);
       await Promise.all(
@@ -479,7 +479,7 @@ export class SplitIO {
         entry.StatesPaths[k],
       );
       states[k] = {
-        filePath: path.basename(target),
+        filePath: `${path.basename(target)}.States`,
         contents: await this.readExtractedObject(target),
       };
     }
