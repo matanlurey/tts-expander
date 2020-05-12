@@ -256,7 +256,7 @@ class SplitIO {
                 data.children.map((c) => this.writeSplitObject(outChild, c.contents)));
             }
             if (data.states && Object.keys(data.states).length) {
-                const outStates = path_1.default.join(to, `${data.metadata.filePath.split('.')[0]}.states`);
+                const outStates = path_1.default.join(to, `${data.metadata.filePath.split('.')[0]}.States`);
                 yield this.mkdirp(outStates);
                 yield Promise.all(Object.entries(data.states).map((c) => 
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -337,7 +337,7 @@ class SplitIO {
             for (const k in entry.StatesPaths) {
                 const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0], entry.StatesPaths[k]);
                 states[k] = {
-                    filePath: path_1.default.basename(target),
+                    filePath: `${path_1.default.basename(target)}.States`,
                     contents: yield this.readExtractedObject(target),
                 };
             }
