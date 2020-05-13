@@ -260,7 +260,8 @@ export function rewriteUrlStrings(
     return input;
   }
   return input.replace(matchUrls, (subString): string => {
-    if (options.ban && subString.match(subString)) {
+    if (options.ban && subString.match(options.ban)) {
+      console.warn(subString.match(subString));
       throw new Error(
         `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
       );

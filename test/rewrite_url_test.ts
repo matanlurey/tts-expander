@@ -14,6 +14,14 @@ test('should support no-op rewrite URL', () => {
   expect(rewriteUrlStrings(input)).toEqual(input);
 });
 
+test('should allow non-banned URLs', () => {
+  expect(() =>
+    rewriteUrlStrings(input, {
+      ban: /http\:\/\/.*\.doesnotappear.com/,
+    }),
+  ).not.toThrowError();
+});
+
 test('should ban Steam URLs', () => {
   expect(() =>
     rewriteUrlStrings(input, {
