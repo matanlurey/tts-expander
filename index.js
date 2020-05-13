@@ -155,14 +155,53 @@ function splitSave(save, name = nameObject) {
     return result;
 }
 exports.splitSave = splitSave;
+const matchUrls = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+/**
+ * Rewrites all URLs in the provided @param input.
+ */
+function rewriteUrlStrings(input, options) {
+    if (!options) {
+        return input;
+    }
+    return input.replace(matchUrls, (subString) => {
+        if (options.ban && subString.match(subString)) {
+            throw new Error(`Unsupported URL: "${subString}" (Matched "${options.ban}")`);
+        }
+        if (options.from && options.to) {
+            return subString.replace(options.from, options.to);
+        }
+        return subString;
+    });
+}
+exports.rewriteUrlStrings = rewriteUrlStrings;
 /**
  * Handles reading/wrting split states to disk or other locations.
  */
 class SplitIO {
-    constructor(readFile = fs.readFile, writeFile = fs.writeFile, mkdirp = fs.mkdirp) {
-        this.readFile = readFile;
-        this.writeFile = writeFile;
-        this.mkdirp = mkdirp;
+    constructor(options) {
+        this.options = options;
+        this.readFile = fs.readFile;
+        this.writeFile = fs.writeFile;
+        this.mkdirp = fs.mkdirp;
+    }
+    rewriteFromSource(input) {
+        if (this.options) {
+            return rewriteUrlStrings(input, {
+                ban: this.options.ban,
+                from: this.options.from,
+                to: this.options.to,
+            });
+        }
+        return input;
+    }
+    rewriteFromBuild(input) {
+        if (this.options) {
+            return rewriteUrlStrings(input, {
+                to: this.options.from,
+                from: this.options.to,
+            });
+        }
+        return input;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readJson(file) {
@@ -182,7 +221,8 @@ class SplitIO {
      */
     readSaveAndSplit(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            return splitSave(yield this.readJson(file));
+            const rawJson = this.rewriteFromBuild(yield this.readFile(file, 'utf-8'));
+            return splitSave(JSON.parse(rawJson));
         });
     }
     /**
@@ -300,7 +340,7 @@ class SplitIO {
                 throw `Unexpected: ${luaOrXml}`;
             }
             const relativeFile = luaOrXml.split('#include')[1].trim();
-            const contents = yield this.readFile(path_1.default.join(dirName, relativeFile), 'utf-8');
+            const contents = this.rewriteFromSource(yield this.readFile(path_1.default.join(dirName, relativeFile), 'utf-8'));
             return {
                 filePath: relativeFile,
                 contents,
@@ -309,7 +349,8 @@ class SplitIO {
     }
     readExtractedSave(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            const entry = (yield this.readJson(file));
+            const rawJson = this.rewriteFromSource(yield this.readFile(file, 'utf-8'));
+            const entry = JSON.parse(rawJson);
             const result = {
                 metadata: {
                     contents: entry.Save,

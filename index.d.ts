@@ -1,5 +1,4 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
-import * as fs from 'fs-extra';
 export { ExpandedObjectState, ExpandedSaveState } from './schema';
 export declare type SplitFragment = {
     contents: string;
@@ -59,13 +58,28 @@ export declare function splitObject(object: ObjectState, name?: typeof nameObjec
  */
 export declare function splitSave(save: SaveState, name?: typeof nameObject): SplitSaveState;
 /**
+ * Rewrites all URLs in the provided @param input.
+ */
+export declare function rewriteUrlStrings(input: string, options?: {
+    ban?: string | RegExp;
+    from?: string;
+    to?: string;
+}): string;
+/**
  * Handles reading/wrting split states to disk or other locations.
  */
 export declare class SplitIO {
+    private readonly options?;
     private readonly readFile;
     private readonly writeFile;
     private readonly mkdirp;
-    constructor(readFile?: typeof fs.readFile, writeFile?: typeof fs.writeFile, mkdirp?: typeof fs.mkdirp);
+    constructor(options?: {
+        ban?: string | RegExp | undefined;
+        from?: string | undefined;
+        to?: string | undefined;
+    } | undefined);
+    private rewriteFromSource;
+    private rewriteFromBuild;
     private readJson;
     private writeJson;
     /**
