@@ -243,15 +243,71 @@ export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   return result;
 }
 
+const matchUrls = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+
+/**
+ * Rewrites all URLs in the provided @param input.
+ */
+export function rewriteUrlStrings(
+  input: string,
+  options?: {
+    ban?: string | RegExp;
+    from?: string;
+    to?: string;
+  },
+): string {
+  if (!options) {
+    return input;
+  }
+  return input.replace(matchUrls, (subString): string => {
+    if (options.ban && subString.match(subString)) {
+      throw new Error(
+        `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
+      );
+    }
+    if (options.from && options.to) {
+      return subString.replace(options.from, options.to);
+    }
+    return subString;
+  });
+}
+
 /**
  * Handles reading/wrting split states to disk or other locations.
  */
 export class SplitIO {
+  private readonly readFile = fs.readFile;
+  private readonly writeFile = fs.writeFile;
+  private readonly mkdirp = fs.mkdirp;
+
   constructor(
-    private readonly readFile = fs.readFile,
-    private readonly writeFile = fs.writeFile,
-    private readonly mkdirp = fs.mkdirp,
+    private readonly options?: {
+      ban?: string | RegExp;
+      from?: string;
+      to?: string;
+    },
   ) {}
+
+  private rewriteFromSource(input: string): string {
+    if (this.options) {
+      return rewriteUrlStrings(input, {
+        ban: this.options.ban,
+        from: this.options.from,
+        to: this.options.to,
+      });
+    }
+    return input;
+  }
+
+  private rewriteFromBuild(input: string): string {
+    if (this.options) {
+      return rewriteUrlStrings(input, {
+        to: this.options.from,
+        from: this.options.to,
+      });
+    }
+    return input;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async readJson(file: string): Promise<any> {
@@ -272,7 +328,8 @@ export class SplitIO {
    * @see writeSplit
    */
   async readSaveAndSplit(file: string): Promise<SplitSaveState> {
-    return splitSave(await this.readJson(file));
+    const rawJson = this.rewriteFromBuild(await this.readFile(file, 'utf-8'));
+    return splitSave(JSON.parse(rawJson));
   }
 
   /**
@@ -423,9 +480,8 @@ export class SplitIO {
       throw `Unexpected: ${luaOrXml}`;
     }
     const relativeFile = luaOrXml.split('#include')[1].trim();
-    const contents = await this.readFile(
-      path.join(dirName, relativeFile),
-      'utf-8',
+    const contents = this.rewriteFromSource(
+      await this.readFile(path.join(dirName, relativeFile), 'utf-8'),
     );
     return {
       filePath: relativeFile,
@@ -434,7 +490,8 @@ export class SplitIO {
   }
 
   private async readExtractedSave(file: string): Promise<SplitSaveState> {
-    const entry = (await this.readJson(file)) as ExpandedSaveState;
+    const rawJson = this.rewriteFromSource(await this.readFile(file, 'utf-8'));
+    const entry = JSON.parse(rawJson) as ExpandedSaveState;
     const result: SplitSaveState = {
       metadata: {
         contents: entry.Save,
