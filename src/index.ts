@@ -523,7 +523,8 @@ export class SplitIO {
   }
 
   private async readExtractedObject(file: string): Promise<SplitObjectState> {
-    const entry = (await this.readJson(file)) as ExpandedObjectState;
+    const rawJson = this.rewriteFromSource(await this.readFile(file, 'utf-8'));
+    const entry = JSON.parse(rawJson) as ExpandedObjectState;
     const states: {
       [key: string]: {
         contents: SplitObjectState;
