@@ -178,7 +178,6 @@ function rewriteUrlStrings(input, options) {
     }
     return input.replace(matchUrls, (subString) => {
         if (options.ban && subString.match(options.ban)) {
-            console.warn(subString.match(subString));
             throw new Error(`Unsupported URL: "${subString}" (Matched "${options.ban}")`);
         }
         if (options.from && options.to) {
@@ -216,12 +215,6 @@ class SplitIO {
             });
         }
         return input;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    readJson(file) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return JSON.parse(yield this.readFile(file, 'utf-8'));
-        });
     }
     writeJson(file, content) {
         return __awaiter(this, void 0, void 0, function* () {

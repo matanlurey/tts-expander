@@ -80,7 +80,6 @@ export declare class SplitIO {
     } | undefined);
     private rewriteFromSource;
     private rewriteFromBuild;
-    private readJson;
     private writeJson;
     /**
      * Reads a @type {SaveState} and returns it as a @type {SplitSaveState}.
