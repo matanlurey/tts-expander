@@ -35,6 +35,7 @@ exports.SplitIO = exports.rewriteUrlStrings = exports.splitSave = exports.splitO
 const filenamify_1 = __importDefault(require("filenamify"));
 const fs = __importStar(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
+const url_regex_1 = __importDefault(require("url-regex"));
 function copyObjectWithoutDuplicateNodes(object, name) {
     const copy = Object.assign({}, object);
     if (copy.ContainedObjects) {
@@ -168,7 +169,7 @@ function splitSave(save, name = nameObject) {
     return result;
 }
 exports.splitSave = splitSave;
-const matchUrls = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+const matchUrls = url_regex_1.default();
 /**
  * Rewrites all URLs in the provided @param input.
  */
