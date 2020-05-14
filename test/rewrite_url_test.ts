@@ -30,7 +30,7 @@ test('should ban Steam URLs', () => {
   ).toThrowError('Unsupported URL');
 });
 
-test('should rewrite to localhost', () => {
+test('should rewrite https://another to http://localhost', () => {
   expect(
     rewriteUrlStrings(input, {
       from: 'https://anotherhost.com',
@@ -42,6 +42,25 @@ test('should rewrite to localhost', () => {
         steamUrl: 'http://cloud-3.steamusercontent.com/ugc/8/B/',
         localHost: 'http://localhost/some/path',
         anotherUrl: 'http://localhost/some/path',
+      },
+      undefined,
+      '  ',
+    ),
+  );
+});
+
+test('should rewrite http://localhost to https://another', () => {
+  expect(
+    rewriteUrlStrings(input, {
+      to: 'https://anotherhost.com',
+      from: 'http://localhost',
+    }),
+  ).toEqual(
+    JSON.stringify(
+      {
+        steamUrl: 'http://cloud-3.steamusercontent.com/ugc/8/B/',
+        localHost: 'https://anotherhost.com/some/path',
+        anotherUrl: 'https://anotherhost.com/some/path',
       },
       undefined,
       '  ',

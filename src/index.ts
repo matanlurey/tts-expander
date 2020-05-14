@@ -2,6 +2,7 @@ import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 import namify from 'filenamify';
 import * as fs from 'fs-extra';
 import path from 'path';
+import urlRegex from 'url-regex';
 import { ExpandedObjectState, ExpandedSaveState } from './schema';
 
 export { ExpandedObjectState, ExpandedSaveState } from './schema';
@@ -243,7 +244,7 @@ export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   return result;
 }
 
-const matchUrls = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+const matchUrls = urlRegex();
 
 /**
  * Rewrites all URLs in the provided @param input.

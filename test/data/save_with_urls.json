@@ -2,7 +2,7 @@
   "SaveName": "Save",
   "GameMode": "Save",
   "XmlUI": "",
-  "LuaScript": "local url = 'https://rewriteme.com/path'",
+  "LuaScript": "local url = 'http://localhost:8080/path'",
   "LuaScriptState": "",
   "ObjectStates": []
 }
