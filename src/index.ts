@@ -261,7 +261,6 @@ export function rewriteUrlStrings(
   }
   return input.replace(matchUrls, (subString): string => {
     if (options.ban && subString.match(options.ban)) {
-      console.warn(subString.match(subString));
       throw new Error(
         `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
       );
@@ -308,11 +307,6 @@ export class SplitIO {
       });
     }
     return input;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private async readJson(file: string): Promise<any> {
-    return JSON.parse(await this.readFile(file, 'utf-8'));
   }
 
   private async writeJson(file: string, content: {}): Promise<void> {
