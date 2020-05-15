@@ -259,21 +259,13 @@ export function rewriteUrlStrings(
   if (!options) {
     return input;
   }
-  console.warn(matchUrls);
   return input.replace(matchUrls, (subString): string => {
-    console.warn(subString);
     if (options.ban && subString.match(options.ban)) {
       throw new Error(
         `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
       );
     }
     if (options.from && options.to) {
-      console.warn(
-        subString,
-        options.from,
-        options.to,
-        subString.replace(options.from, options.to),
-      );
       return subString.replace(options.from, options.to);
     }
     return subString;
