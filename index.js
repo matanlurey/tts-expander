@@ -35,7 +35,6 @@ exports.SplitIO = exports.rewriteUrlStrings = exports.splitSave = exports.splitO
 const filenamify_1 = __importDefault(require("filenamify"));
 const fs = __importStar(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
-const url_regex_1 = __importDefault(require("url-regex"));
 function copyObjectWithoutDuplicateNodes(object, name) {
     const copy = Object.assign({}, object);
     if (copy.ContainedObjects) {
@@ -169,7 +168,7 @@ function splitSave(save, name = nameObject) {
     return result;
 }
 exports.splitSave = splitSave;
-const matchUrls = url_regex_1.default();
+const matchUrls = /[a-z]+:\/\/.*\b/gi;
 /**
  * Rewrites all URLs in the provided @param input.
  */
@@ -177,11 +176,14 @@ function rewriteUrlStrings(input, options) {
     if (!options) {
         return input;
     }
+    console.warn(matchUrls);
     return input.replace(matchUrls, (subString) => {
+        console.warn(subString);
         if (options.ban && subString.match(options.ban)) {
             throw new Error(`Unsupported URL: "${subString}" (Matched "${options.ban}")`);
         }
         if (options.from && options.to) {
+            console.warn(subString, options.from, options.to, subString.replace(options.from, options.to));
             return subString.replace(options.from, options.to);
         }
         return subString;
