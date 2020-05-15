@@ -2,7 +2,6 @@ import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 import namify from 'filenamify';
 import * as fs from 'fs-extra';
 import path from 'path';
-import urlRegex from 'url-regex';
 import { ExpandedObjectState, ExpandedSaveState } from './schema';
 
 export { ExpandedObjectState, ExpandedSaveState } from './schema';
@@ -244,7 +243,7 @@ export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   return result;
 }
 
-const matchUrls = urlRegex();
+const matchUrls = /[a-z]+:\/\/.*\b/gi;
 
 /**
  * Rewrites all URLs in the provided @param input.
@@ -260,13 +259,21 @@ export function rewriteUrlStrings(
   if (!options) {
     return input;
   }
+  console.warn(matchUrls);
   return input.replace(matchUrls, (subString): string => {
+    console.warn(subString);
     if (options.ban && subString.match(options.ban)) {
       throw new Error(
         `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
       );
     }
     if (options.from && options.to) {
+      console.warn(
+        subString,
+        options.from,
+        options.to,
+        subString.replace(options.from, options.to),
+      );
       return subString.replace(options.from, options.to);
     }
     return subString;

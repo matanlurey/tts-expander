@@ -67,3 +67,19 @@ test('should rewrite http://localhost to https://another', () => {
     ),
   );
 });
+
+test('should rewrite to/from file:// URLs', () => {
+  expect(
+    rewriteUrlStrings('"https://domain.com/bird.jpg"', {
+      from: 'https://domain.com/',
+      to: 'file://C:\\Directory\\Assets\\',
+    }),
+  ).toEqual('"file://C:\\Directory\\Assets\\bird.jpg"');
+
+  expect(
+    rewriteUrlStrings('"file://C:\\Directory\\Assets\\bird.jpg"', {
+      from: 'file://C:\\Directory\\Assets\\',
+      to: 'https://domain.com/',
+    }),
+  ).toEqual('"https://domain.com/bird.jpg"');
+});
