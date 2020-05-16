@@ -32,6 +32,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SplitIO = exports.rewriteUrlStrings = exports.splitSave = exports.splitObject = exports.nameObject = void 0;
+const eol_1 = __importDefault(require("eol"));
 const filenamify_1 = __importDefault(require("filenamify"));
 const fs = __importStar(require("fs-extra"));
 const path_1 = __importDefault(require("path"));
@@ -177,8 +178,17 @@ function rewriteUrlStrings(input, options) {
         return input;
     }
     return input.replace(matchUrls, (subString) => {
-        if (options.ban && subString.match(options.ban)) {
-            throw new Error(`Unsupported URL: "${subString}" (Matched "${options.ban}")`);
+        if (options.ban) {
+            let allow = true;
+            if (typeof options.ban == 'function') {
+                allow = options.ban(subString);
+            }
+            else {
+                allow = subString.match(options.ban) === null;
+            }
+            if (!allow) {
+                throw new Error(`Unsupported URL: "${subString}" (Matched "${options.ban}")`);
+            }
         }
         if (options.from && options.to) {
             return subString.replace(options.from, options.to);
@@ -196,6 +206,17 @@ class SplitIO {
         this.readFile = fs.readFile;
         this.writeFile = fs.writeFile;
         this.mkdirp = fs.mkdirp;
+    }
+    writeString(file, content) {
+        var _a;
+        let normalized = content;
+        if (((_a = this.options) === null || _a === void 0 ? void 0 : _a.normalizeNewLines) !== false) {
+            normalized = eol_1.default.lf(normalized);
+            if (!normalized.endsWith('\n')) {
+                normalized = `${normalized}\n`;
+            }
+        }
+        return this.writeFile(file, normalized, 'utf-8');
     }
     rewriteFromSource(input) {
         if (this.options) {
@@ -218,7 +239,7 @@ class SplitIO {
     }
     writeJson(file, content) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.writeFile(file, JSON.stringify(content, undefined, '  '), 'utf-8');
+            return this.writeString(file, JSON.stringify(content, undefined, '  '));
         });
     }
     /**
@@ -267,11 +288,11 @@ class SplitIO {
             yield this.writeJson(outJson, this.toEncodedSave(data));
             if (data.luaScript) {
                 const outLua = path_1.default.join(to, data.luaScript.filePath);
-                yield this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+                yield this.writeString(outLua, data.luaScript.contents);
             }
             if (data.xmlUi) {
                 const outLua = path_1.default.join(to, data.xmlUi.filePath);
-                yield this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+                yield this.writeString(outLua, data.xmlUi.contents);
             }
             if (data.children && data.children.length) {
                 const outChild = path_1.default.join(to, data.metadata.filePath.split('.')[0]);
@@ -289,11 +310,11 @@ class SplitIO {
             yield this.writeJson(outJson, this.toEncodedObject(data));
             if (data.luaScript) {
                 const outLua = path_1.default.join(to, data.luaScript.filePath);
-                yield this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+                yield this.writeString(outLua, data.luaScript.contents);
             }
             if (data.xmlUi) {
                 const outLua = path_1.default.join(to, data.xmlUi.filePath);
-                yield this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+                yield this.writeString(outLua, data.xmlUi.contents);
             }
             if (data.children && data.children.length) {
                 const outChild = path_1.default.join(to, data.metadata.filePath.split('.')[0]);

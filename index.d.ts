@@ -61,7 +61,7 @@ export declare function splitSave(save: SaveState, name?: typeof nameObject): Sp
  * Rewrites all URLs in the provided @param input.
  */
 export declare function rewriteUrlStrings(input: string, options?: {
-    ban?: string | RegExp;
+    ban?: string | RegExp | ((url: string) => boolean);
     from?: string;
     to?: string;
 }): string;
@@ -74,10 +74,12 @@ export declare class SplitIO {
     private readonly writeFile;
     private readonly mkdirp;
     constructor(options?: {
-        ban?: string | RegExp | undefined;
+        ban?: string | RegExp | ((url: string) => boolean) | undefined;
         from?: string | undefined;
         to?: string | undefined;
+        normalizeNewLines?: boolean | undefined;
     } | undefined);
+    private writeString;
     private rewriteFromSource;
     private rewriteFromBuild;
     private writeJson;
