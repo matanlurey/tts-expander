@@ -244,7 +244,7 @@ export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   return result;
 }
 
-const matchUrls = /[a-z]+:\/\/.*\b/gi;
+const matchUrls = /[a-z]+:\/\/[\S].+?(?=[\'|\"|\s])/gi;
 
 /**
  * Rewrites all URLs in the provided @param input.
@@ -252,6 +252,7 @@ const matchUrls = /[a-z]+:\/\/.*\b/gi;
 export function rewriteUrlStrings(
   input: string,
   options?: {
+    fileName?: string;
     ban?: string | RegExp | ((url: string) => boolean);
     from?: string;
     to?: string;
@@ -260,7 +261,7 @@ export function rewriteUrlStrings(
   if (!options) {
     return input;
   }
-  return input.replace(matchUrls, (subString): string => {
+  return input.replace(matchUrls, (subString, offset): string => {
     if (options.ban) {
       let allow = true;
       if (typeof options.ban == 'function') {
@@ -269,9 +270,13 @@ export function rewriteUrlStrings(
         allow = subString.match(options.ban) === null;
       }
       if (!allow) {
-        throw new Error(
-          `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
-        );
+        let message = `Unsupported URL: "${subString}"`;
+        if (options.fileName) {
+          message = `${message} in ${options.fileName}:${offset}`;
+        } else {
+          message = `${message} in ${input.length} characters:${offset}`;
+        }
+        throw new Error(message);
       }
     }
     if (options.from && options.to) {
@@ -309,22 +314,24 @@ export class SplitIO {
     return this.writeFile(file, normalized, 'utf-8');
   }
 
-  private rewriteFromSource(input: string): string {
+  private rewriteFromSource(input: string, fileName?: string): string {
     if (this.options) {
       return rewriteUrlStrings(input, {
         ban: this.options.ban,
         from: this.options.from,
         to: this.options.to,
+        fileName: fileName,
       });
     }
     return input;
   }
 
-  private rewriteFromBuild(input: string): string {
+  private rewriteFromBuild(input: string, fileName?: string): string {
     if (this.options) {
       return rewriteUrlStrings(input, {
         to: this.options.from,
         from: this.options.to,
+        fileName: fileName,
       });
     }
     return input;
@@ -340,7 +347,10 @@ export class SplitIO {
    * @see writeSplit
    */
   async readSaveAndSplit(file: string): Promise<SplitSaveState> {
-    const rawJson = this.rewriteFromBuild(await this.readFile(file, 'utf-8'));
+    const rawJson = this.rewriteFromBuild(
+      await this.readFile(file, 'utf-8'),
+      file,
+    );
     return splitSave(JSON.parse(rawJson));
   }
 
@@ -492,8 +502,10 @@ export class SplitIO {
       throw `Unexpected: ${luaOrXml}`;
     }
     const relativeFile = luaOrXml.split('#include')[1].trim();
+    const filePath = path.join(dirName, relativeFile);
     const contents = this.rewriteFromSource(
-      await this.readFile(path.join(dirName, relativeFile), 'utf-8'),
+      await this.readFile(filePath, 'utf-8'),
+      filePath,
     );
     return {
       filePath: relativeFile,
@@ -502,7 +514,10 @@ export class SplitIO {
   }
 
   private async readExtractedSave(file: string): Promise<SplitSaveState> {
-    const rawJson = this.rewriteFromSource(await this.readFile(file, 'utf-8'));
+    const rawJson = this.rewriteFromSource(
+      await this.readFile(file, 'utf-8'),
+      file,
+    );
     const entry = JSON.parse(rawJson) as ExpandedSaveState;
     const result: SplitSaveState = {
       metadata: {

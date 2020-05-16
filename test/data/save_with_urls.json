@@ -4,5 +4,10 @@
   "XmlUI": "",
   "LuaScript": "local url = 'http://localhost:8080/path'",
   "LuaScriptState": "",
-  "ObjectStates": []
+  "ObjectStates": [
+    {
+      "Name": "Block",
+      "LuaScript": "local url1 = 'http://localhost:8080/path1'\nlocal url2 = 'http://localhost:8080/path2'\n"
+    }
+  ]
 }
