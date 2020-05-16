@@ -61,6 +61,7 @@ export declare function splitSave(save: SaveState, name?: typeof nameObject): Sp
  * Rewrites all URLs in the provided @param input.
  */
 export declare function rewriteUrlStrings(input: string, options?: {
+    fileName?: string;
     ban?: string | RegExp | ((url: string) => boolean);
     from?: string;
     to?: string;
