@@ -294,7 +294,7 @@ export class SplitIO {
       ban?: string | RegExp | ((url: string) => boolean);
       from?: string;
       to?: string;
-      normalizeNewLines: boolean;
+      normalizeNewLines?: boolean;
     },
   ) {}
 
