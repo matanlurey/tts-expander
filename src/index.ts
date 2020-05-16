@@ -1,4 +1,5 @@
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
+import eol from 'eol';
 import namify from 'filenamify';
 import * as fs from 'fs-extra';
 import path from 'path';
@@ -251,7 +252,7 @@ const matchUrls = /[a-z]+:\/\/.*\b/gi;
 export function rewriteUrlStrings(
   input: string,
   options?: {
-    ban?: string | RegExp;
+    ban?: string | RegExp | ((url: string) => boolean);
     from?: string;
     to?: string;
   },
@@ -260,10 +261,18 @@ export function rewriteUrlStrings(
     return input;
   }
   return input.replace(matchUrls, (subString): string => {
-    if (options.ban && subString.match(options.ban)) {
-      throw new Error(
-        `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
-      );
+    if (options.ban) {
+      let allow = true;
+      if (typeof options.ban == 'function') {
+        allow = options.ban(subString);
+      } else {
+        allow = subString.match(options.ban) === null;
+      }
+      if (!allow) {
+        throw new Error(
+          `Unsupported URL: "${subString}" (Matched "${options.ban}")`,
+        );
+      }
     }
     if (options.from && options.to) {
       return subString.replace(options.from, options.to);
@@ -282,11 +291,23 @@ export class SplitIO {
 
   constructor(
     private readonly options?: {
-      ban?: string | RegExp;
+      ban?: string | RegExp | ((url: string) => boolean);
       from?: string;
       to?: string;
+      normalizeNewLines: boolean;
     },
   ) {}
+
+  private writeString(file: string, content: string): Promise<void> {
+    let normalized = content;
+    if (this.options?.normalizeNewLines !== false) {
+      normalized = eol.lf(normalized);
+      if (!normalized.endsWith('\n')) {
+        normalized = `${normalized}\n`;
+      }
+    }
+    return this.writeFile(file, normalized, 'utf-8');
+  }
 
   private rewriteFromSource(input: string): string {
     if (this.options) {
@@ -310,11 +331,7 @@ export class SplitIO {
   }
 
   private async writeJson(file: string, content: {}): Promise<void> {
-    return this.writeFile(
-      file,
-      JSON.stringify(content, undefined, '  '),
-      'utf-8',
-    );
+    return this.writeString(file, JSON.stringify(content, undefined, '  '));
   }
 
   /**
@@ -365,12 +382,12 @@ export class SplitIO {
 
     if (data.luaScript) {
       const outLua = path.join(to, data.luaScript.filePath);
-      await this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+      await this.writeString(outLua, data.luaScript.contents);
     }
 
     if (data.xmlUi) {
       const outLua = path.join(to, data.xmlUi.filePath);
-      await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+      await this.writeString(outLua, data.xmlUi.contents);
     }
 
     if (data.children && data.children.length) {
@@ -394,12 +411,12 @@ export class SplitIO {
 
     if (data.luaScript) {
       const outLua = path.join(to, data.luaScript.filePath);
-      await this.writeFile(outLua, data.luaScript.contents, 'utf-8');
+      await this.writeString(outLua, data.luaScript.contents);
     }
 
     if (data.xmlUi) {
       const outLua = path.join(to, data.xmlUi.filePath);
-      await this.writeFile(outLua, data.xmlUi.contents, 'utf-8');
+      await this.writeString(outLua, data.xmlUi.contents);
     }
 
     if (data.children && data.children.length) {

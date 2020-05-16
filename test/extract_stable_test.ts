@@ -22,7 +22,10 @@ afterEach(() => fs.remove(workDir));
 // ... and back again, without the < Big Json Blob > changing.
 fs.readdirSync(path.join('samples', 'saves')).map((sample) => {
   test(sample, async () => {
-    const io = new SplitIO();
+    const io = new SplitIO({
+      // We don't want to try and change the newlines of the sample code.
+      normalizeNewLines: false,
+    });
     const input = path.join('samples', 'saves', sample);
 
     // Read the file as-is.

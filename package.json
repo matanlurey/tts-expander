@@ -23,6 +23,7 @@
     "@matanlurey/tts-runner": "github:matanlurey/tts-runner",
     "@matanlurey/tts-save-files": "github:matanlurey/tts-save-format",
     "@matanlurey/tts-save-format": "github:matanlurey/tts-save-format",
+    "eol": "^0.9.1",
     "filenamify": "^4.1.0",
     "fs-extra": "^9.0.0"
   },
