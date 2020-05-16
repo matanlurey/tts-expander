@@ -13,4 +13,9 @@ test('should split and rewrite a URL', async () => {
   expect(extracted.luaScript?.contents).toEqual(
     "local url = 'https://assets.swlegion.dev/path'",
   );
+  expect(extracted.children?.[0].contents.luaScript?.contents).toEqual(
+    '' +
+      "local url1 = 'https://assets.swlegion.dev/path1'\n" +
+      "local url2 = 'https://assets.swlegion.dev/path2'\n",
+  );
 });

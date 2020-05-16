@@ -30,6 +30,15 @@ test('should ban Steam URLs', () => {
   ).toThrowError('Unsupported URL');
 });
 
+test('should show file and offset of banned URL', () => {
+  expect(() =>
+    rewriteUrlStrings('"http://test.com"', {
+      fileName: 'File.lua',
+      ban: () => false,
+    }),
+  ).toThrowError('Unsupported URL: "http://test.com" in File.lua:1');
+});
+
 test('should allow custom tests for URLs', () => {
   expect(() =>
     rewriteUrlStrings(input, {
@@ -90,4 +99,18 @@ test('should rewrite to/from file:// URLs', () => {
       to: 'https://domain.com/',
     }),
   ).toEqual('"https://domain.com/bird.jpg"');
+});
+
+test('should rewrite multiple URLs in one input string', () => {
+  expect(
+    rewriteUrlStrings(
+      ['http://1.com/a', `'http://1.com/b'`, '"http://1.com/c"`'].join('\n'),
+      {
+        from: '1.com',
+        to: '2.com',
+      },
+    ),
+  ).toEqual(
+    ['http://2.com/a', `'http://2.com/b'`, '"http://2.com/c"`'].join('\n'),
+  );
 });
