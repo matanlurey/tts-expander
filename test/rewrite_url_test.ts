@@ -30,6 +30,14 @@ test('should ban Steam URLs', () => {
   ).toThrowError('Unsupported URL');
 });
 
+test('should allow custom tests for URLs', () => {
+  expect(() =>
+    rewriteUrlStrings(input, {
+      ban: (url) => url.startsWith('http://'),
+    }),
+  ).toThrowError('Unsupported URL');
+});
+
 test('should rewrite https://another to http://localhost', () => {
   expect(
     rewriteUrlStrings(input, {
