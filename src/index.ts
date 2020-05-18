@@ -163,14 +163,64 @@ function splitStates(
   return result;
 }
 
+const matchIncludeLine = /\#include\s+\!\/(.*)/;
+const matchIncludedLua = /\-{4}\#include\s+(.*)/;
+
+function reduceLuaIncludes(lines: string[]): string {
+  const output: string[] = [];
+  let inStatement: string | undefined;
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const match = line.match(matchIncludedLua);
+    if (match) {
+      if (inStatement) {
+        inStatement = undefined;
+      } else {
+        inStatement = match[1];
+        output.push(`#include ${inStatement}`);
+      }
+    } else if (!inStatement) {
+      output.push(line);
+    }
+    i++;
+  }
+  return output.join('\n');
+}
+
+async function insertLuaIncludes(
+  lines: string[],
+  includesDir: string,
+  readString: (file: string) => Promise<string>,
+): Promise<string> {
+  const output: string[] = [];
+  for (const line of lines) {
+    const match = line.match(matchIncludeLine);
+    if (match) {
+      const url = match[1];
+      output.push(`---- #include !/${url}`);
+      const content = await readString(path.join(includesDir, `${url}.ttslua`));
+      output.push(content);
+      output.push(`---- #include !/${url}`);
+    } else {
+      output.push(line);
+    }
+  }
+  return output.join('\n');
+}
+
 function splitLua(
   input: {
     LuaScript?: string;
   },
   name: string,
 ): undefined | SplitFragment {
+  let lua = input.LuaScript || '';
+  if (lua.length > 0) {
+    lua = reduceLuaIncludes(lua.split('\n'));
+  }
   return {
-    contents: input.LuaScript || '',
+    contents: lua,
     filePath: `${name}.lua`,
   };
 }
@@ -493,6 +543,7 @@ export class SplitIO {
 
   private async readIncludes(
     dirName: string,
+    includes: string,
     luaOrXml?: string,
   ): Promise<SplitFragment | undefined> {
     if (!luaOrXml) {
@@ -503,10 +554,15 @@ export class SplitIO {
     }
     const relativeFile = luaOrXml.split('#include')[1].trim();
     const filePath = path.join(dirName, relativeFile);
-    const contents = this.rewriteFromSource(
-      await this.readFile(filePath, 'utf-8'),
-      filePath,
-    );
+    let contents = await this.readFile(filePath, 'utf-8');
+    if (contents.indexOf('#include !/') !== -1) {
+      contents = await insertLuaIncludes(
+        contents.split('\n'),
+        includes,
+        (file: string) => this.readFile(file, 'utf-8'),
+      );
+    }
+    contents = this.rewriteFromSource(contents, filePath);
     return {
       filePath: relativeFile,
       contents,
@@ -518,6 +574,7 @@ export class SplitIO {
       await this.readFile(file, 'utf-8'),
       file,
     );
+    const includesDir = path.join(path.dirname(file), 'includes');
     const entry = JSON.parse(rawJson) as ExpandedSaveState;
     const result: SplitSaveState = {
       metadata: {
@@ -526,9 +583,14 @@ export class SplitIO {
       },
       luaScript: await this.readIncludes(
         path.dirname(file),
+        includesDir,
         entry.Save.LuaScript,
       ),
-      xmlUi: await this.readIncludes(path.dirname(file), entry.Save.XmlUI),
+      xmlUi: await this.readIncludes(
+        path.dirname(file),
+        includesDir,
+        entry.Save.XmlUI,
+      ),
     };
     if (entry.ObjectPaths) {
       result.children = await Promise.all(
@@ -540,7 +602,7 @@ export class SplitIO {
           );
           return {
             filePath: path.basename(target),
-            contents: await this.readExtractedObject(target),
+            contents: await this.readExtractedObject(target, includesDir),
           };
         }),
       );
@@ -548,7 +610,10 @@ export class SplitIO {
     return result;
   }
 
-  private async readExtractedObject(file: string): Promise<SplitObjectState> {
+  private async readExtractedObject(
+    file: string,
+    includesDir: string,
+  ): Promise<SplitObjectState> {
     const rawJson = this.rewriteFromSource(await this.readFile(file, 'utf-8'));
     const entry = JSON.parse(rawJson) as ExpandedObjectState;
     const states: {
@@ -565,7 +630,7 @@ export class SplitIO {
       );
       states[k] = {
         filePath: path.basename(target),
-        contents: await this.readExtractedObject(target),
+        contents: await this.readExtractedObject(target, includesDir),
       };
     }
     const result: SplitObjectState = {
@@ -576,9 +641,14 @@ export class SplitIO {
       states,
       luaScript: await this.readIncludes(
         path.dirname(file),
+        includesDir,
         entry.Object.LuaScript,
       ),
-      xmlUi: await this.readIncludes(path.dirname(file), entry.Object.XmlUI),
+      xmlUi: await this.readIncludes(
+        path.dirname(file),
+        includesDir,
+        entry.Object.XmlUI,
+      ),
     };
     if (entry.ContainedObjectPaths) {
       result.children = await Promise.all(
@@ -590,7 +660,7 @@ export class SplitIO {
           );
           return {
             filePath: path.basename(target),
-            contents: await this.readExtractedObject(target),
+            contents: await this.readExtractedObject(target, includesDir),
           };
         }),
       );
