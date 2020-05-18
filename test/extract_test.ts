@@ -96,7 +96,9 @@ test('should split an object with Lua that uses #include', () => {
       filePath: 'Pawn.123456.lua',
     },
   };
-  expect(splitObject(data)).toEqual(expected);
+  const result = splitObject(data);
+  expect(result).toEqual(expected);
+  expect(result.xmlUi).toBeUndefined();
 });
 
 test('should split an object with XML', () => {

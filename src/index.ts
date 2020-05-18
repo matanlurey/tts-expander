@@ -198,10 +198,10 @@ async function insertLuaIncludes(
     const match = line.match(matchIncludeLine);
     if (match) {
       const url = match[1];
-      output.push(`---- #include !/${url}`);
+      output.push(`----#include !/${url}`);
       const content = await readString(path.join(includesDir, `${url}.ttslua`));
       output.push(content);
-      output.push(`---- #include !/${url}`);
+      output.push(`----#include !/${url}`);
     } else {
       output.push(line);
     }

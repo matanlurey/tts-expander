@@ -7,10 +7,10 @@ test('should collapse an object with Lua that uses #include', async () => {
   );
   expect(tree.LuaScript).toEqual(
     [
-      '---- #include !/matrix',
+      '----#include !/matrix',
       'print("Hello")',
       '',
-      '---- #include !/matrix',
+      '----#include !/matrix',
     ].join('\n') + '\n',
   );
 });
