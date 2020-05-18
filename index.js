@@ -102,9 +102,57 @@ function splitStates(states, split, name = nameObject) {
     }
     return result;
 }
+const matchIncludeLine = /\#include\s+\!\/(.*)/;
+const matchIncludedLua = /\-{4}\#include\s+(.*)/;
+function reduceLuaIncludes(lines) {
+    const output = [];
+    let inStatement;
+    let i = 0;
+    while (i < lines.length) {
+        const line = lines[i];
+        const match = line.match(matchIncludedLua);
+        if (match) {
+            if (inStatement) {
+                inStatement = undefined;
+            }
+            else {
+                inStatement = match[1];
+                output.push(`#include ${inStatement}`);
+            }
+        }
+        else if (!inStatement) {
+            output.push(line);
+        }
+        i++;
+    }
+    return output.join('\n');
+}
+function insertLuaIncludes(lines, includesDir, readString) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const output = [];
+        for (const line of lines) {
+            const match = line.match(matchIncludeLine);
+            if (match) {
+                const url = match[1];
+                output.push(`---- #include !/${url}`);
+                const content = yield readString(path_1.default.join(includesDir, `${url}.ttslua`));
+                output.push(content);
+                output.push(`---- #include !/${url}`);
+            }
+            else {
+                output.push(line);
+            }
+        }
+        return output.join('\n');
+    });
+}
 function splitLua(input, name) {
+    let lua = input.LuaScript || '';
+    if (lua.length > 0) {
+        lua = reduceLuaIncludes(lua.split('\n'));
+    }
     return {
-        contents: input.LuaScript || '',
+        contents: lua,
         filePath: `${name}.lua`,
     };
 }
@@ -368,7 +416,7 @@ class SplitIO {
         }
         return result;
     }
-    readIncludes(dirName, luaOrXml) {
+    readIncludes(dirName, includes, luaOrXml) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!luaOrXml) {
                 return undefined;
@@ -378,7 +426,11 @@ class SplitIO {
             }
             const relativeFile = luaOrXml.split('#include')[1].trim();
             const filePath = path_1.default.join(dirName, relativeFile);
-            const contents = this.rewriteFromSource(yield this.readFile(filePath, 'utf-8'), filePath);
+            let contents = yield this.readFile(filePath, 'utf-8');
+            if (contents.indexOf('#include !/') !== -1) {
+                contents = yield insertLuaIncludes(contents.split('\n'), includes, (file) => this.readFile(file, 'utf-8'));
+            }
+            contents = this.rewriteFromSource(contents, filePath);
             return {
                 filePath: relativeFile,
                 contents,
@@ -388,28 +440,29 @@ class SplitIO {
     readExtractedSave(file) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawJson = this.rewriteFromSource(yield this.readFile(file, 'utf-8'), file);
+            const includesDir = path_1.default.join(path_1.default.dirname(file), 'includes');
             const entry = JSON.parse(rawJson);
             const result = {
                 metadata: {
                     contents: entry.Save,
                     filePath: path_1.default.basename(file),
                 },
-                luaScript: yield this.readIncludes(path_1.default.dirname(file), entry.Save.LuaScript),
-                xmlUi: yield this.readIncludes(path_1.default.dirname(file), entry.Save.XmlUI),
+                luaScript: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Save.LuaScript),
+                xmlUi: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Save.XmlUI),
             };
             if (entry.ObjectPaths) {
                 result.children = yield Promise.all(entry.ObjectPaths.map((relative) => __awaiter(this, void 0, void 0, function* () {
                     const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0], relative);
                     return {
                         filePath: path_1.default.basename(target),
-                        contents: yield this.readExtractedObject(target),
+                        contents: yield this.readExtractedObject(target, includesDir),
                     };
                 })));
             }
             return result;
         });
     }
-    readExtractedObject(file) {
+    readExtractedObject(file, includesDir) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawJson = this.rewriteFromSource(yield this.readFile(file, 'utf-8'));
             const entry = JSON.parse(rawJson);
@@ -418,7 +471,7 @@ class SplitIO {
                 const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0] + '.States', entry.StatesPaths[k]);
                 states[k] = {
                     filePath: path_1.default.basename(target),
-                    contents: yield this.readExtractedObject(target),
+                    contents: yield this.readExtractedObject(target, includesDir),
                 };
             }
             const result = {
@@ -427,15 +480,15 @@ class SplitIO {
                     filePath: path_1.default.basename(file),
                 },
                 states,
-                luaScript: yield this.readIncludes(path_1.default.dirname(file), entry.Object.LuaScript),
-                xmlUi: yield this.readIncludes(path_1.default.dirname(file), entry.Object.XmlUI),
+                luaScript: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Object.LuaScript),
+                xmlUi: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Object.XmlUI),
             };
             if (entry.ContainedObjectPaths) {
                 result.children = yield Promise.all(entry.ContainedObjectPaths.map((relative) => __awaiter(this, void 0, void 0, function* () {
                     const target = path_1.default.join(path_1.default.dirname(file), path_1.default.basename(file).split('.')[0], relative);
                     return {
                         filePath: path_1.default.basename(target),
-                        contents: yield this.readExtractedObject(target),
+                        contents: yield this.readExtractedObject(target, includesDir),
                     };
                 })));
             }
