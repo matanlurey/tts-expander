@@ -134,10 +134,10 @@ function insertLuaIncludes(lines, includesDir, readString) {
             const match = line.match(matchIncludeLine);
             if (match) {
                 const url = match[1];
-                output.push(`---- #include !/${url}`);
+                output.push(`----#include !/${url}`);
                 const content = yield readString(path_1.default.join(includesDir, `${url}.ttslua`));
                 output.push(content);
-                output.push(`---- #include !/${url}`);
+                output.push(`----#include !/${url}`);
             }
             else {
                 output.push(line);
