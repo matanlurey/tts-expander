@@ -1,3 +1,4 @@
+import { formatter } from '@appguru/luafmt';
 import { ObjectState, SaveState } from '@matanlurey/tts-save-format/src/types';
 import eol from 'eol';
 import namify from 'filenamify';
@@ -32,7 +33,7 @@ export interface SplitState<
   };
 
   /**
-   * Child objects, in order of appereance.
+   * Child objects, in order of appearance.
    */
   children?: Array<{
     contents: SplitObjectState;
@@ -52,7 +53,7 @@ export interface SplitState<
 
 export interface SplitObjectState extends SplitState<ObjectState> {
   /**
-   * Swappable states, if any.
+   * Swap-able states, if any.
    */
   states: {
     [key: string]: {
@@ -337,12 +338,13 @@ export function rewriteUrlStrings(
 }
 
 /**
- * Handles reading/wrting split states to disk or other locations.
+ * Handles reading/writing split states to disk or other locations.
  */
 export class SplitIO {
   private readonly readFile = fs.readFile;
   private readonly writeFile = fs.writeFile;
   private readonly mkdirp = fs.mkdirp;
+  private readonly format: (lua: string) => string;
 
   constructor(
     private readonly options?: {
@@ -350,8 +352,20 @@ export class SplitIO {
       from?: string;
       to?: string;
       normalizeNewLines?: boolean;
+      format?: (lua: string) => string;
     },
-  ) {}
+  ) {
+    if (options?.format) {
+      this.format = options.format;
+    } else {
+      this.format = formatter({
+        indent: '  ',
+        newline: '\n',
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        extra_newlines: true,
+      });
+    }
+  }
 
   private writeString(file: string, content: string): Promise<void> {
     let normalized = content;
@@ -470,7 +484,7 @@ export class SplitIO {
     await this.writeJson(outJson, this.toEncodedObject(data));
 
     if (data.luaScript) {
-      const outLua = path.join(to, data.luaScript.filePath);
+      const outLua = this.format(path.join(to, data.luaScript.filePath));
       await this.writeString(outLua, data.luaScript.contents);
     }
 

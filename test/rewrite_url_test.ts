@@ -99,6 +99,13 @@ test('should rewrite to/from file:// URLs', () => {
       to: 'https://domain.com/',
     }),
   ).toEqual('"https://domain.com/bird.jpg"');
+
+  expect(
+    rewriteUrlStrings('"file:///C:\\Another-D\\Assets\\unit-leader.obj"', {
+      from: 'file:///C:\\Another-D\\Assets\\',
+      to: 'https://domain.com/',
+    }),
+  ).toEqual('"https://domain.com/unit-leader.obj"');
 });
 
 test('should rewrite multiple URLs in one input string', () => {

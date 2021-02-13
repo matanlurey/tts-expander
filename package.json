@@ -19,6 +19,7 @@
   "author": "Matan Lurey",
   "license": "MIT",
   "dependencies": {
+    "@appguru/luafmt": "^1.5.0",
     "@matanlurey/tts-editor": "github:matanlurey/tts-editor",
     "@matanlurey/tts-runner": "github:matanlurey/tts-runner",
     "@matanlurey/tts-save-files": "github:matanlurey/tts-save-format",
