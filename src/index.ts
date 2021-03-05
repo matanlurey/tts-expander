@@ -45,6 +45,11 @@ export interface SplitState<
   luaScript?: SplitFragment;
 
   /**
+   * Lua state JSON, if any.
+   */
+  luaScriptState?: SplitFragment;
+
+  /**
    * XML UI, if any.
    */
   xmlUi?: SplitFragment;
@@ -77,6 +82,9 @@ function copyObjectWithoutDuplicateNodes(
   }
   if (copy.LuaScript) {
     copy.LuaScript = `#include ./${name}.lua`;
+  }
+  if (copy.LuaScriptState) {
+    copy.LuaScriptState = `#include ./${name}.state.json`;
   }
   if (copy.XmlUI) {
     copy.XmlUI = `#include ./${name}.xml`;
@@ -225,6 +233,19 @@ function splitLua(
   };
 }
 
+function splitLuaState(
+  input: {
+    LuaScriptState?: string;
+  },
+  name: string,
+): undefined | SplitFragment {
+  const contents = input.LuaScriptState || '';
+  return {
+    contents,
+    filePath: `${name}.state.json`,
+  };
+}
+
 function splitXml(
   input: {
     XmlUI?: string;
@@ -263,6 +284,9 @@ export function splitObject(
   if (object.LuaScript) {
     result.luaScript = splitLua(object, objectName);
   }
+  if (object.LuaScriptState) {
+    result.luaScriptState = splitLuaState(object, objectName);
+  }
   if (object.XmlUI) {
     result.xmlUi = splitXml(object, objectName);
   }
@@ -287,6 +311,9 @@ export function splitSave(save: SaveState, name = nameObject): SplitSaveState {
   };
   if (save.LuaScript) {
     result.luaScript = splitLua(save, save.SaveName);
+  }
+  if (save.LuaScriptState) {
+    result.luaScriptState = splitLuaState(save, save.SaveName);
   }
   if (save.XmlUI) {
     result.xmlUi = splitXml(save, save.SaveName);
@@ -445,6 +472,11 @@ export class SplitIO {
       await this.writeString(outLua, data.luaScript.contents);
     }
 
+    if (data.luaScriptState) {
+      const outJson = path.join(to, data.luaScriptState.filePath);
+      await this.writeString(outJson, data.luaScriptState.contents);
+    }
+
     if (data.xmlUi) {
       const outLua = path.join(to, data.xmlUi.filePath);
       await this.writeString(outLua, data.xmlUi.contents);
@@ -472,6 +504,11 @@ export class SplitIO {
     if (data.luaScript) {
       const outLua = path.join(to, data.luaScript.filePath);
       await this.writeString(outLua, data.luaScript.contents);
+    }
+
+    if (data.luaScriptState) {
+      const outLua = path.join(to, data.luaScriptState.filePath);
+      await this.writeString(outLua, data.luaScriptState.contents);
     }
 
     if (data.xmlUi) {
@@ -514,6 +551,7 @@ export class SplitIO {
     return {
       ...save.metadata.contents,
       LuaScript: save.luaScript?.contents || '',
+      LuaScriptState: save.luaScriptState?.contents || '',
       XmlUI: save.xmlUi?.contents || '',
       ObjectStates:
         save.children?.map((c) => this.collapseObject(c.contents)) || [],
@@ -524,6 +562,7 @@ export class SplitIO {
     const result = {
       ...object.metadata.contents,
       LuaScript: object.luaScript?.contents || '',
+      LuaScriptState: object.luaScriptState?.contents || '',
       XmlUI: object.xmlUi?.contents || '',
     } as ObjectState;
     if (object.children) {
@@ -586,6 +625,11 @@ export class SplitIO {
         includesDir,
         entry.Save.LuaScript,
       ),
+      luaScriptState: await this.readIncludes(
+        path.dirname(file),
+        includesDir,
+        entry.Save.LuaScriptState,
+      ),
       xmlUi: await this.readIncludes(
         path.dirname(file),
         includesDir,
@@ -643,6 +687,11 @@ export class SplitIO {
         path.dirname(file),
         includesDir,
         entry.Object.LuaScript,
+      ),
+      luaScriptState: await this.readIncludes(
+        path.dirname(file),
+        includesDir,
+        entry.Object.LuaScriptState,
       ),
       xmlUi: await this.readIncludes(
         path.dirname(file),

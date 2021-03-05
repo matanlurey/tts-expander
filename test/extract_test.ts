@@ -73,6 +73,28 @@ test('should split an object with Lua', () => {
   expect(splitObject(data)).toEqual(expected);
 });
 
+test('should split an object with LuaScriptState', () => {
+  const data: ObjectState = {
+    Name: 'Pawn',
+    GUID: '123456',
+    LuaScriptState: '{"hello": "world"}',
+    ...commonObjectProps,
+  };
+  const copy = { ...data, LuaScriptState: '#include ./Pawn.123456.state.json' };
+  const expected: SplitObjectState = {
+    metadata: {
+      contents: copy,
+      filePath: 'Pawn.123456.json',
+    },
+    states: {},
+    luaScriptState: {
+      contents: '{"hello": "world"}',
+      filePath: 'Pawn.123456.state.json',
+    },
+  };
+  expect(splitObject(data)).toEqual(expected);
+});
+
 test('should split an object with Lua that uses #include', () => {
   const luaWithIncludes =
     ['----#include !/matrix', 'print("Hello")', '----#include !/matrix'].join(
