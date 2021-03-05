@@ -32,6 +32,10 @@ export interface SplitState<T extends {
      */
     luaScript?: SplitFragment;
     /**
+     * Lua state JSON, if any.
+     */
+    luaScriptState?: SplitFragment;
+    /**
      * XML UI, if any.
      */
     xmlUi?: SplitFragment;

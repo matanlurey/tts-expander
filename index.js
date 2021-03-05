@@ -47,6 +47,9 @@ function copyObjectWithoutDuplicateNodes(object, name) {
     if (copy.LuaScript) {
         copy.LuaScript = `#include ./${name}.lua`;
     }
+    if (copy.LuaScriptState) {
+        copy.LuaScriptState = `#include ./${name}.state.json`;
+    }
     if (copy.XmlUI) {
         copy.XmlUI = `#include ./${name}.xml`;
     }
@@ -156,6 +159,13 @@ function splitLua(input, name) {
         filePath: `${name}.lua`,
     };
 }
+function splitLuaState(input, name) {
+    const contents = input.LuaScriptState || '';
+    return {
+        contents,
+        filePath: `${name}.state.json`,
+    };
+}
 function splitXml(input, name) {
     return {
         contents: input.XmlUI || '',
@@ -186,6 +196,9 @@ function splitObject(object, name = nameObject) {
     if (object.LuaScript) {
         result.luaScript = splitLua(object, objectName);
     }
+    if (object.LuaScriptState) {
+        result.luaScriptState = splitLuaState(object, objectName);
+    }
     if (object.XmlUI) {
         result.xmlUi = splitXml(object, objectName);
     }
@@ -210,6 +223,9 @@ function splitSave(save, name = nameObject) {
     };
     if (save.LuaScript) {
         result.luaScript = splitLua(save, save.SaveName);
+    }
+    if (save.LuaScriptState) {
+        result.luaScriptState = splitLuaState(save, save.SaveName);
     }
     if (save.XmlUI) {
         result.xmlUi = splitXml(save, save.SaveName);
@@ -347,6 +363,10 @@ class SplitIO {
                 const outLua = path_1.default.join(to, data.luaScript.filePath);
                 yield this.writeString(outLua, data.luaScript.contents);
             }
+            if (data.luaScriptState) {
+                const outJson = path_1.default.join(to, data.luaScriptState.filePath);
+                yield this.writeString(outJson, data.luaScriptState.contents);
+            }
             if (data.xmlUi) {
                 const outLua = path_1.default.join(to, data.xmlUi.filePath);
                 yield this.writeString(outLua, data.xmlUi.contents);
@@ -368,6 +388,10 @@ class SplitIO {
             if (data.luaScript) {
                 const outLua = path_1.default.join(to, data.luaScript.filePath);
                 yield this.writeString(outLua, data.luaScript.contents);
+            }
+            if (data.luaScriptState) {
+                const outLua = path_1.default.join(to, data.luaScriptState.filePath);
+                yield this.writeString(outLua, data.luaScriptState.contents);
             }
             if (data.xmlUi) {
                 const outLua = path_1.default.join(to, data.xmlUi.filePath);
@@ -398,12 +422,12 @@ class SplitIO {
         });
     }
     collapseSave(save) {
-        var _a, _b, _c;
-        return Object.assign(Object.assign({}, save.metadata.contents), { LuaScript: ((_a = save.luaScript) === null || _a === void 0 ? void 0 : _a.contents) || '', XmlUI: ((_b = save.xmlUi) === null || _b === void 0 ? void 0 : _b.contents) || '', ObjectStates: ((_c = save.children) === null || _c === void 0 ? void 0 : _c.map((c) => this.collapseObject(c.contents))) || [] });
+        var _a, _b, _c, _d;
+        return Object.assign(Object.assign({}, save.metadata.contents), { LuaScript: ((_a = save.luaScript) === null || _a === void 0 ? void 0 : _a.contents) || '', LuaScriptState: ((_b = save.luaScriptState) === null || _b === void 0 ? void 0 : _b.contents) || '', XmlUI: ((_c = save.xmlUi) === null || _c === void 0 ? void 0 : _c.contents) || '', ObjectStates: ((_d = save.children) === null || _d === void 0 ? void 0 : _d.map((c) => this.collapseObject(c.contents))) || [] });
     }
     collapseObject(object) {
-        var _a, _b;
-        const result = Object.assign(Object.assign({}, object.metadata.contents), { LuaScript: ((_a = object.luaScript) === null || _a === void 0 ? void 0 : _a.contents) || '', XmlUI: ((_b = object.xmlUi) === null || _b === void 0 ? void 0 : _b.contents) || '' });
+        var _a, _b, _c;
+        const result = Object.assign(Object.assign({}, object.metadata.contents), { LuaScript: ((_a = object.luaScript) === null || _a === void 0 ? void 0 : _a.contents) || '', LuaScriptState: ((_b = object.luaScriptState) === null || _b === void 0 ? void 0 : _b.contents) || '', XmlUI: ((_c = object.xmlUi) === null || _c === void 0 ? void 0 : _c.contents) || '' });
         if (object.children) {
             result.ContainedObjects = object.children.map((c) => this.collapseObject(c.contents));
         }
@@ -448,6 +472,7 @@ class SplitIO {
                     filePath: path_1.default.basename(file),
                 },
                 luaScript: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Save.LuaScript),
+                luaScriptState: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Save.LuaScriptState),
                 xmlUi: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Save.XmlUI),
             };
             if (entry.ObjectPaths) {
@@ -481,6 +506,7 @@ class SplitIO {
                 },
                 states,
                 luaScript: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Object.LuaScript),
+                luaScriptState: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Object.LuaScriptState),
                 xmlUi: yield this.readIncludes(path_1.default.dirname(file), includesDir, entry.Object.XmlUI),
             };
             if (entry.ContainedObjectPaths) {
