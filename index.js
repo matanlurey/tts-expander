@@ -448,12 +448,22 @@ class SplitIO {
             if (!luaOrXml.startsWith('#include')) {
                 throw `Unexpected: ${luaOrXml}`;
             }
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            const _this = this;
+            function recursiveReadAndInclude(fileName) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const raw = yield _this.readFile(fileName, 'utf-8');
+                    if (raw.indexOf('#include !/') !== -1) {
+                        return yield insertLuaIncludes(raw.split('\n'), includes, recursiveReadAndInclude);
+                    }
+                    else {
+                        return raw;
+                    }
+                });
+            }
             const relativeFile = luaOrXml.split('#include')[1].trim();
             const filePath = path_1.default.join(dirName, relativeFile);
-            let contents = yield this.readFile(filePath, 'utf-8');
-            if (contents.indexOf('#include !/') !== -1) {
-                contents = yield insertLuaIncludes(contents.split('\n'), includes, (file) => this.readFile(file, 'utf-8'));
-            }
+            let contents = yield recursiveReadAndInclude(filePath);
             contents = this.rewriteFromSource(contents, filePath);
             return {
                 filePath: relativeFile,
