@@ -8,6 +8,11 @@ test('should collapse an object with Lua that uses #include', async () => {
   expect(tree.LuaScript).toEqual(
     [
       '----#include !/matrix',
+      '----#include !/nested',
+      '-- NESTED INCLUDE',
+      '',
+      '----#include !/nested',
+      '',
       'print("Hello")',
       '',
       '----#include !/matrix',
