@@ -174,7 +174,10 @@ function splitStates(
 const matchIncludeLine = /\#include\s+\!\/(.*)/;
 const matchIncludedLua = /\-{4}\#include\s+(.*)/;
 
-function reduceLuaIncludes(lines: string[]): string {
+/**
+ * @internal For testing only.
+ */
+export function reduceLuaIncludes(lines: string[]): string {
   const output: string[] = [];
   let inStatement: string | undefined;
   let i = 0;
@@ -182,9 +185,11 @@ function reduceLuaIncludes(lines: string[]): string {
     const line = lines[i];
     const match = line.match(matchIncludedLua);
     if (match) {
-      if (inStatement) {
-        inStatement = undefined;
-      } else {
+      if (inStatement && match[1] !== inStatement) {
+        // Found another (non-matching) #include.
+        i++;
+        continue;
+      } else if (!inStatement) {
         inStatement = match[1];
         output.push(`#include ${inStatement}`);
       }

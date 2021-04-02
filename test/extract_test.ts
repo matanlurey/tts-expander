@@ -96,10 +96,11 @@ test('should split an object with LuaScriptState', () => {
 });
 
 test('should split an object with Lua that uses #include', () => {
-  const luaWithIncludes =
-    ['----#include !/matrix', 'print("Hello")', '----#include !/matrix'].join(
-      '\n',
-    ) + '\n';
+  const luaWithIncludes = [
+    '----#include !/matrix',
+    'print("Hello")',
+    '----#include !/matrix',
+  ].join('\n');
   const data: ObjectState = {
     Name: 'Pawn',
     GUID: '123456',
@@ -114,7 +115,7 @@ test('should split an object with Lua that uses #include', () => {
     },
     states: {},
     luaScript: {
-      contents: '#include !/matrix\n',
+      contents: '#include !/matrix',
       filePath: 'Pawn.123456.lua',
     },
   };
