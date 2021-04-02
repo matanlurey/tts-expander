@@ -54,6 +54,10 @@ export interface SplitObjectState extends SplitState<ObjectState> {
 export declare type SplitSaveState = SplitState<SaveState>;
 export declare function nameObject(object: ObjectState): string;
 /**
+ * @internal For testing only.
+ */
+export declare function reduceLuaIncludes(lines: string[]): string;
+/**
  * Returns the provided @param object split into a tree of @returns {SplitObjectState}.
  */
 export declare function splitObject(object: ObjectState, name?: typeof nameObject): SplitObjectState;

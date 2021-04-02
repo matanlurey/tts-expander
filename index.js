@@ -31,7 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SplitIO = exports.rewriteUrlStrings = exports.splitSave = exports.splitObject = exports.nameObject = void 0;
+exports.SplitIO = exports.rewriteUrlStrings = exports.splitSave = exports.splitObject = exports.reduceLuaIncludes = exports.nameObject = void 0;
 const eol_1 = __importDefault(require("eol"));
 const filenamify_1 = __importDefault(require("filenamify"));
 const fs = __importStar(require("fs-extra"));
@@ -107,6 +107,9 @@ function splitStates(states, split, name = nameObject) {
 }
 const matchIncludeLine = /\#include\s+\!\/(.*)/;
 const matchIncludedLua = /\-{4}\#include\s+(.*)/;
+/**
+ * @internal For testing only.
+ */
 function reduceLuaIncludes(lines) {
     const output = [];
     let inStatement;
@@ -115,10 +118,12 @@ function reduceLuaIncludes(lines) {
         const line = lines[i];
         const match = line.match(matchIncludedLua);
         if (match) {
-            if (inStatement) {
-                inStatement = undefined;
+            if (inStatement && match[1] !== inStatement) {
+                // Found another (non-matching) #include.
+                i++;
+                continue;
             }
-            else {
+            else if (!inStatement) {
                 inStatement = match[1];
                 output.push(`#include ${inStatement}`);
             }
@@ -130,6 +135,7 @@ function reduceLuaIncludes(lines) {
     }
     return output.join('\n');
 }
+exports.reduceLuaIncludes = reduceLuaIncludes;
 function insertLuaIncludes(lines, includesDir, readString) {
     return __awaiter(this, void 0, void 0, function* () {
         const output = [];
