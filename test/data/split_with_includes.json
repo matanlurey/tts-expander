@@ -2,7 +2,7 @@
   "Save": {
     "SaveName": "Save",
     "GameMode": "Save",
-    "XmlUI": "",
+    "XmlUI": "#include ./split_with_includes.xml",
     "LuaScript": "#include ./split_with_includes.lua",
     "LuaScriptState": "",
     "ObjectStates": []

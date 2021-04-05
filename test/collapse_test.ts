@@ -1,7 +1,7 @@
 import path from 'path';
 import { reduceLuaIncludes, SplitIO } from '../src';
 
-test('should collapse an object with Lua that uses #include', async () => {
+test('should collapse an object that uses #include', async () => {
   const tree = await new SplitIO().readAndCollapse(
     path.join('test', 'data', 'split_with_includes.json'),
   );
@@ -20,7 +20,7 @@ test('should collapse an object with Lua that uses #include', async () => {
   );
 });
 
-test('should reduce a nested #include', () => {
+test('should reduce a nested Lua #include', () => {
   const nestedCollapse = [
     '----#include !/matrix',
     '----#include !/nested',
@@ -33,4 +33,19 @@ test('should reduce a nested #include', () => {
     '----#include !/matrix',
   ];
   expect(reduceLuaIncludes(nestedCollapse)).toBe('#include !/matrix');
+});
+
+test('should reduce a nested Xml #include', () => {
+  const nestedCollapse = [
+    '<!--#include !/matrix-->',
+    '<!--#include !/nested-->',
+    '-- NESTED INCLUDE',
+    '',
+    '<!--#include !/nested-->',
+    '',
+    'print("Hello")',
+    '',
+    '<!--#include !/matrix-->',
+  ];
+  expect(reduceLuaIncludes(nestedCollapse)).toBe('<!--#include !/matrix-->');
 });

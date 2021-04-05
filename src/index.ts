@@ -173,6 +173,7 @@ function splitStates(
 
 const matchIncludeLine = /\#include\s+\!\/(.*)/;
 const matchIncludedLua = /\-{4}\#include\s+(.*)/;
+const matchIncludedXml = /\<\!\-{2}\s*\#include\s+(.*)/;
 
 /**
  * @internal For testing only.
@@ -183,7 +184,7 @@ export function reduceLuaIncludes(lines: string[]): string {
   let i = 0;
   while (i < lines.length) {
     const line = lines[i];
-    const match = line.match(matchIncludedLua);
+    const match = line.match(matchIncludedLua) || line.match(matchIncludedXml);
     if (match) {
       if (inStatement && match[1] !== inStatement) {
         // Found another (non-matching) #include.
@@ -191,7 +192,12 @@ export function reduceLuaIncludes(lines: string[]): string {
         continue;
       } else if (!inStatement) {
         inStatement = match[1];
-        output.push(`#include ${inStatement}`);
+        const isXml = line.indexOf('<!--') !== -1;
+        if (isXml) {
+          output.push(`<!--#include ${inStatement.split('-->')[0].trim()}-->`);
+        } else {
+          output.push(`#include ${inStatement}`);
+        }
       }
     } else if (!inStatement) {
       output.push(line);
@@ -210,11 +216,22 @@ async function insertLuaIncludes(
   for (const line of lines) {
     const match = line.match(matchIncludeLine);
     if (match) {
-      const url = match[1];
-      output.push(`----#include !/${url}`);
-      const content = await readString(path.join(includesDir, `${url}.ttslua`));
-      output.push(content);
-      output.push(`----#include !/${url}`);
+      const isXml = line.indexOf('<!--') !== -1;
+      let url = match[1];
+      if (isXml) {
+        url = url.split('-->')[0].trim();
+        output.push(`<!-- #include !/${url} -->`);
+        const content = await readString(path.join(includesDir, `${url}.xml`));
+        output.push(content);
+        output.push(`<!-- #include !/${url} -->`);
+      } else {
+        output.push(`----#include !/${url}`);
+        const content = await readString(
+          path.join(includesDir, `${url}.ttslua`),
+        );
+        output.push(content);
+        output.push(`----#include !/${url}`);
+      }
     } else {
       output.push(line);
     }
