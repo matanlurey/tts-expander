@@ -131,7 +131,7 @@ function reduceLuaIncludes(lines) {
                     output.push(`<!--#include ${inStatement.split('-->')[0].trim()}-->`);
                 }
                 else {
-                    output.push(`#include ${inStatement}`);
+                    output.push(`require('${inStatement}')`);
                 }
             }
         }
@@ -292,7 +292,7 @@ function rewriteUrlStrings(input, options) {
 }
 exports.rewriteUrlStrings = rewriteUrlStrings;
 /**
- * Handles reading/wrting split states to disk or other locations.
+ * Handles reading/writing split states to disk or other locations.
  */
 class SplitIO {
     constructor(options) {

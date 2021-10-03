@@ -75,7 +75,7 @@ export declare function rewriteUrlStrings(input: string, options?: {
     to?: string;
 }): string;
 /**
- * Handles reading/wrting split states to disk or other locations.
+ * Handles reading/writing split states to disk or other locations.
  */
 export declare class SplitIO {
     private readonly options?;
