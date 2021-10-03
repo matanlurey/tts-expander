@@ -20,6 +20,25 @@ test('should collapse an object that uses #include', async () => {
   );
 });
 
+test('should collapse an object that uses require()', async () => {
+  const tree = await new SplitIO().readAndCollapse(
+    path.join('test', 'data', 'split_with_includes_require.json'),
+  );
+  expect(tree.LuaScript).toEqual(
+    [
+      '----#include !/matrix-require',
+      '----#include !/nested',
+      '-- NESTED INCLUDE',
+      '',
+      '----#include !/nested',
+      '',
+      'print("Hello")',
+      '',
+      '----#include !/matrix-require',
+    ].join('\n') + '\n',
+  );
+});
+
 test('should reduce a nested Lua #include', () => {
   const nestedCollapse = [
     '----#include !/matrix',
