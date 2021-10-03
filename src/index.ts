@@ -171,7 +171,7 @@ function splitStates(
   return result;
 }
 
-const matchIncludeLine = /\#include\s+\!\/(.*)/;
+const matchIncludeLine = /(\#include\s+\!\/(.*)|require\s*\(\s*\'\!\/(.*)\'\)|require\s*\(\s*\"\!\/(.*)\"\))/;
 const matchIncludedLua = /\-{4}\#include\s+(.*)/;
 const matchIncludedXml = /\<\!\-{2}\s*\#include\s+(.*)/;
 
@@ -217,7 +217,7 @@ async function insertLuaIncludes(
     const match = line.match(matchIncludeLine);
     if (match) {
       const isXml = line.indexOf('<!--') !== -1;
-      let url = match[1];
+      let url = match[3] || match[2];
       if (isXml) {
         url = url.split('-->')[0].trim();
         output.push(`<!-- #include !/${url} -->`);
@@ -617,7 +617,7 @@ export class SplitIO {
     const _this = this;
     async function recursiveReadAndInclude(fileName: string): Promise<string> {
       const raw = await _this.readFile(fileName, 'utf-8');
-      if (raw.indexOf('#include !/') !== -1) {
+      if (raw.indexOf('#include !/') !== -1 || raw.indexOf('require(') !== -1) {
         return await insertLuaIncludes(
           raw.split('\n'),
           includes,
