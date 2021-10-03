@@ -15,6 +15,8 @@ The goals of this library are:
 [1]: https://kb.tabletopsimulator.com/custom-content/save-file-format/
 [2]: https://store.steampowered.com/app/286160/Tabletop_Simulator/
 
+> **NOTE**: As of 0.2.0, the `require('...')` function is used over `#include`.
+
 ## API
 
 ```ts

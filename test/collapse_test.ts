@@ -51,7 +51,7 @@ test('should reduce a nested Lua #include', () => {
     '',
     '----#include !/matrix',
   ];
-  expect(reduceLuaIncludes(nestedCollapse)).toBe('#include !/matrix');
+  expect(reduceLuaIncludes(nestedCollapse)).toBe("require('!/matrix')");
 });
 
 test('should reduce a nested Xml #include', () => {

@@ -53,6 +53,13 @@
   "eslint.lintTask.enable": true,
   "editor.tabSize": 2,
   "cSpell.words": [
+    "appereance",
+    "Autoraise",
+    "filenamify",
+    "namify",
+    "postbuild",
+    "prettierignore",
+    "Swappable",
     "ttslua"
   ]
 }

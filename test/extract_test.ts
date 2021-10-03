@@ -115,7 +115,7 @@ test('should split an object with Lua that uses #include', () => {
     },
     states: {},
     luaScript: {
-      contents: '#include !/matrix',
+      contents: "require('!/matrix')",
       filePath: 'Pawn.123456.lua',
     },
   };
