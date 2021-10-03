@@ -1,6 +1,6 @@
 {
   "name": "@matanlurey/tts-expander",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Expands and collapses the save-file format for Tabletop Simulator",
   "scripts": {
     "build": "tsc --build tsconfig.dist.json && ts-node tool/postbuild.ts",
