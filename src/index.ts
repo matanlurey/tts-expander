@@ -190,6 +190,10 @@ export function reduceLuaIncludes(lines: string[]): string {
         // Found another (non-matching) #include.
         i++;
         continue;
+      } else if (inStatement && match[1] === inStatement) {
+        i++;
+        inStatement = undefined;
+        continue;
       } else if (!inStatement) {
         inStatement = match[1];
         const isXml = line.indexOf('<!--') !== -1;
